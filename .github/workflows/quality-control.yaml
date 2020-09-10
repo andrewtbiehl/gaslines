@@ -1,0 +1,95 @@
+# The following workflow runs upon pushing new commits to any branches
+# It runs and reports all code quality checks required to merge to main
+name: Quality Control
+on: push
+jobs:
+  # The following job is for any setup that can be outsourced from the other jobs
+  setup:
+    name: Setup
+    runs-on: ubuntu-18.04
+    timeout-minutes: 3
+    outputs:
+      PYTHON_VERSION: ${{env.PYTHON_VERSION}}
+      PYTHON_CACHE_KEY: ${{env.PYTHON_CACHE_KEY}}
+      PYTHON_PATH: ${{env.PYTHON_PATH}}
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v2
+      - name: Determine project Python version
+        run: |
+          PYTHON_VERSION=$(jq --raw-output "._meta.requires.python_version" Pipfile.lock)
+          echo "::set-env name=PYTHON_VERSION::${PYTHON_VERSION}"
+      - name: Install project Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{env.PYTHON_VERSION}}
+      - name: Get project Python path
+        run: |
+          PYTHON_CACHE_KEY=python-packages-${{hashFiles('Pipfile.lock')}}
+          echo "::set-env name=PYTHON_CACHE_KEY::${PYTHON_CACHE_KEY}"
+          PYTHON_PATH=$(python -c "import sys, pathlib; print(pathlib.Path(sys.executable).parent.parent)")
+          echo "::set-env name=PYTHON_PATH::${PYTHON_PATH}"
+      - name: Restore project Python cache
+        id: restore-project-python-cache
+        uses: actions/cache@v2
+        with:
+          key: ${{env.PYTHON_CACHE_KEY}}
+          path: ${{env.PYTHON_PATH}}
+      - name: Install project Python packages
+        if: ${{!steps.restore-project-python-cache.outputs.cache-hit}}
+        run: |
+          pip list --outdated --format=freeze | sed "s/==.*//" | xargs pip install --upgrade
+          pip install pipenv
+          pipenv install --system --ignore-pipfile --deploy --dev
+  # The following job is for all static code analyis, such as format enforcement and linting
+  check:
+    name: Check
+    runs-on: ubuntu-18.04
+    timeout-minutes: 3
+    needs: setup
+    env:
+      PYTHON_VERSION: ${{needs.setup.outputs.PYTHON_VERSION}}
+      PYTHON_CACHE_KEY: ${{needs.setup.outputs.PYTHON_CACHE_KEY}}
+      PYTHON_PATH: ${{needs.setup.outputs.PYTHON_PATH}}
+    steps:
+      # The following three steps are (unfortunately) required to set up the job
+      - name: Checkout project
+        uses: actions/checkout@v2
+      - name: Install project Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{env.PYTHON_VERSION}}
+      - name: Restore project Python cache
+        uses: actions/cache@v2
+        with:
+          key: ${{env.PYTHON_CACHE_KEY}}
+          path: ${{env.PYTHON_PATH}}
+      # The following step is the central step to this job
+      - name: Run checks
+        run: echo "No checks yet!"
+  # The following job is for all dynamic code analyis, also known as tests
+  test:
+    name: Test
+    runs-on: ubuntu-18.04
+    timeout-minutes: 3
+    needs: setup
+    env:
+      PYTHON_VERSION: ${{needs.setup.outputs.PYTHON_VERSION}}
+      PYTHON_CACHE_KEY: ${{needs.setup.outputs.PYTHON_CACHE_KEY}}
+      PYTHON_PATH: ${{needs.setup.outputs.PYTHON_PATH}}
+    steps:
+      # The following three steps are (unfortunately) required to set up the job
+      - name: Checkout project
+        uses: actions/checkout@v2
+      - name: Install project Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{env.PYTHON_VERSION}}
+      - name: Restore project Python cache
+        uses: actions/cache@v2
+        with:
+          key: ${{env.PYTHON_CACHE_KEY}}
+          path: ${{env.PYTHON_PATH}}
+      # The following step is the central step to this job
+      - name: Run tests
+        run: echo "No tests yet!"
