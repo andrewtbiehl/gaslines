@@ -19,4 +19,7 @@ def check(context):
 
 @invoke.task
 def test(context):
-    print("No tests yet!")
+    print("----TEST-------------------------")
+    print(" * pytest")
+    print()
+    context.run("pytest", pty=True)
