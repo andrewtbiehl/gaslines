@@ -66,7 +66,7 @@ jobs:
           path: ${{env.PYTHON_PATH}}
       # The following step is the central step to this job
       - name: Run checks
-        run: echo "No checks yet!"
+        run: invoke check
   # The following job is for all dynamic code analyis, also known as tests
   test:
     name: Test
@@ -92,4 +92,4 @@ jobs:
           path: ${{env.PYTHON_PATH}}
       # The following step is the central step to this job
       - name: Run tests
-        run: echo "No tests yet!"
+        run: invoke test
