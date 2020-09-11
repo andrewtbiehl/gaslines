@@ -3,12 +3,18 @@ import invoke
 
 @invoke.task(name="format")
 def format_(context):
-    print("No formatting yet!")
+    print("----FORMAT-----------------------")
+    print(" * black")
+    print()
+    context.run("black .", pty=True)
 
 
 @invoke.task
 def check(context):
-    print("No checks yet!")
+    print("----CHECK------------------------")
+    print(" * black")
+    print()
+    context.run("black . --check", pty=True)
 
 
 @invoke.task
