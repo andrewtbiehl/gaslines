@@ -20,11 +20,21 @@ def check(context):
 
 
 @invoke.task
-def test(context):
+def test(context, coverage=None):
     print("----TEST-------------------------")
+    # Run tests
     print(" * pytest")
     print()
-    failed = execute("pytest")
+    failed = execute("coverage run -m pytest")
+    # Print coverage report
+    print()
+    print(" * coverage")
+    print()
+    failed = execute("coverage report") or failed
+    if coverage == "write":
+        # Write coverage report to file, ignore threshold
+        failed = execute("coverage html --fail-under=0") or failed
+    failed = execute("rm .coverage") or failed
     sys.exit(failed)
 
 
