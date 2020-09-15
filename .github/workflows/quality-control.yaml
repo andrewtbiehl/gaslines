@@ -92,4 +92,6 @@ jobs:
           path: ${{env.PYTHON_PATH}}
       # The following step is the central step to this job
       - name: Run tests
-        run: invoke test
+        env:
+            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: invoke test --coverage=upload
