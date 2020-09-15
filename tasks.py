@@ -34,6 +34,10 @@ def test(context, coverage=None):
     if coverage == "write":
         # Write coverage report to file, ignore threshold
         failed = execute("coverage html --fail-under=0") or failed
+    elif coverage == "upload":
+        # Upload coverage; fails if not run in GitHub Actions context
+        print()
+        failed = execute("coveralls") or failed
     failed = execute("rm .coverage") or failed
     sys.exit(failed)
 
