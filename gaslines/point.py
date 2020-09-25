@@ -1,3 +1,6 @@
+from gaslines.utility import Direction
+
+
 class Point:
     """
     Represents a single lattice point in a Gas Lines puzzle grid
@@ -38,3 +41,32 @@ class Point:
 
     def has_child(self):
         return self.child is not None
+
+    def get_neighbor(self, direction):
+        """
+        Returns the point adjacent to this one in the direction specified if one
+        exists, otherwise None
+        """
+        # Get the hypothetical location of the neighbor
+        # Pairwise add this point's location to the direction vector
+        i, j = tuple(sum(vectors) for vectors in zip(self.location, direction.value))
+        grid = self.grid
+        # Get the neighbor only if that location is actually on the grid
+        return grid[i][j] if 0 <= i < grid.height and 0 <= j < grid.length else None
+
+    def has_neighbor(self, direction):
+        return self.get_neighbor(direction) is not None
+
+    def get_neighbors(self):
+        """
+        Returns all points that exist and are adjacent to this one, in the order
+        specified by the Direction enum, skipping directions for which no such
+        neighbor exists
+
+        The specified Direction enum order is NORTH, EAST, SOUTH, WEST
+        """
+        return tuple(
+            self.get_neighbor(direction)
+            for direction in Direction
+            if self.has_neighbor(direction)
+        )
