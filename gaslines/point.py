@@ -70,3 +70,20 @@ class Point:
             for direction in Direction
             if self.has_neighbor(direction)
         )
+
+    @property
+    def parent(self):
+        """
+        Returns the (necessarily adjacent) point with this as its child if such a
+        point exists and if this is not a sink, otherwise None
+        """
+        # It doesn't make sense to request the parent of a sink
+        if self.is_sink():
+            return None
+        for neighbor in self.get_neighbors():
+            if neighbor.child is self:
+                return neighbor
+        return None
+
+    def has_parent(self):
+        return self.parent is not None

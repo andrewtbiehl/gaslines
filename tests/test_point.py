@@ -121,3 +121,27 @@ def test_get_neighbors_with_some_neighbors_returns_correct_points():
     neighbors = point.get_neighbors()
     assert len(neighbors) == 2
     assert [point._type for point in neighbors] == [2, 3]
+
+
+def test_parent_with_parent_returns_correct_point():
+    grid = Grid(((2, -1), (1, 0)))
+    parent, child = grid[0][0], grid[0][1]
+    parent.child = child
+    assert child.has_parent()
+    assert child.parent is parent
+
+
+def test_parent_with_no_parent_returns_none():
+    grid = Grid(((2, -1), (1, 0)))
+    point = grid[0][1]
+    assert not point.has_parent()
+    assert point.parent is None
+
+
+def test_parent_with_sink_returns_none():
+    grid = Grid(((2, -1), (1, 0)))
+    source, pipe, sink = grid[0][0], grid[0][1], grid[1][1]
+    source.child = pipe
+    pipe.child = sink
+    assert not sink.has_parent()
+    assert sink.parent is None
