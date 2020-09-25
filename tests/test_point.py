@@ -1,5 +1,7 @@
 import pytest
 from gaslines.point import Point
+from gaslines.grid import Grid
+from gaslines.utility import Direction
 
 
 @pytest.mark.parametrize("grid", (None, [[0, 1], [None, None]], ((0, 1), (None, None))))
@@ -69,3 +71,53 @@ def test_child_returns_no_child_when_child_reset():
     point.child = None
     assert not point.has_child()
     assert point.child is None
+
+
+def test_get_neighbor_with_neighbor_present_returns_correct_point():
+    # The types have been carefully assigned for ease of testing
+    grid = Grid(((0, 1, 0), (4, 5, 2), (0, 3, 0)))
+    point = grid[1][1]
+    assert point._type == 5
+    # Test that the correct neighbor exists in each direction
+    for i, direction in enumerate(Direction):
+        assert point.has_neighbor(direction)
+        neighbor = point.get_neighbor(direction)
+        assert neighbor._type == i + 1
+
+
+def test_get_neighbor_with_missing_neighbor_returns_none():
+    # The types have been carefully assigned for ease of testing
+    grid = Grid(((1, 2, 0), (0, 0, 3), (0, 0, 4)))
+    # Test the north west point
+    point = grid[0][0]
+    assert point._type == 1
+    assert not (
+        point.has_neighbor(Direction.NORTH) or point.has_neighbor(Direction.WEST)
+    )
+    assert point.get_neighbor(Direction.NORTH) is None
+    # Test the north center point
+    point = grid[0][1]
+    assert point._type == 2
+    assert not point.has_neighbor(Direction.NORTH)
+    assert point.get_neighbor(Direction.NORTH) is None
+    # Test the center east point
+    point = grid[1][2]
+    assert point._type == 3
+    assert not point.has_neighbor(Direction.EAST)
+    assert point.get_neighbor(Direction.EAST) is None
+    # Test the south east point
+    point = grid[2][2]
+    assert point._type == 4
+    assert not (
+        point.has_neighbor(Direction.EAST) or point.has_neighbor(Direction.EAST)
+    )
+    assert point.get_neighbor(Direction.EAST) is None
+
+
+def test_get_neighbors_with_some_neighbors_returns_correct_points():
+    grid = Grid(((1, 2), (3, 0)))
+    point = grid[0][0]
+    assert point._type == 1
+    neighbors = point.get_neighbors()
+    assert len(neighbors) == 2
+    assert [point._type for point in neighbors] == [2, 3]
