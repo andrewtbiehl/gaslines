@@ -14,6 +14,12 @@ class Grid:
         self._height = len(self._grid)
         self._length = len(self._grid[0])
 
+    def __getitem__(self, row_index):
+        """
+        Returns the row at the specified index of the grid
+        """
+        return self._grid[row_index]
+
     @property
     def height(self):
         return self._height
