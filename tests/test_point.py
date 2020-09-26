@@ -16,6 +16,13 @@ def test_location_returns_location_when_asked(location):
     assert point.location == location
 
 
+@pytest.mark.parametrize("row_index,column_index", ((0, 0), (0, 1), (1, 2)))
+def test_indexes_return_correct_values_when_asked(row_index, column_index):
+    point = Point(None, (row_index, column_index))
+    assert point.row_index == row_index
+    assert point.column_index == column_index
+
+
 @pytest.mark.parametrize("type_", (1, 2, 3, 9, 45))
 def test_is_source_returns_true_when_is_source(type_):
     point = Point(None, None, type_)

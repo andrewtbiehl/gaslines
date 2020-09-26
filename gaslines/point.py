@@ -25,6 +25,14 @@ class Point:
     def location(self):
         return self._location
 
+    @property
+    def row_index(self):
+        return self.location[0]
+
+    @property
+    def column_index(self):
+        return self.location[1]
+
     def is_source(self):
         return self._type > 0
 
