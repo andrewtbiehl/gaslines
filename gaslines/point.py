@@ -95,3 +95,11 @@ class Point:
 
     def has_parent(self):
         return self.parent is not None
+
+    def is_open(self):
+        """
+        Returns whether or not this is open to be set as a child of another point
+
+        Sink points always display as open
+        """
+        return not self.is_source() and not self.has_parent()
