@@ -152,3 +152,32 @@ def test_parent_with_sink_returns_none():
     pipe.child = sink
     assert not sink.has_parent()
     assert sink.parent is None
+
+
+def test_is_open_with_source_returns_false():
+    grid = Grid(((2, -1), (1, 0)))
+    assert not grid[0][0].is_open()
+
+
+def test_is_open_with_sink_returns_true():
+    grid = Grid(((2, -1), (1, 0)))
+    sink = grid[1][1]
+    # Test sink is open with no "parents"
+    assert sink.is_open()
+    # Test sink is open with one "parent"
+    grid[0][0].child = grid[0][1]
+    grid[0][1].child = sink
+    assert sink.is_open()
+    # Test sink is open with two "parents"
+    grid[1][0].child = sink
+    assert sink.is_open()
+
+
+def test_is_open_with_pipe_conditional_on_parent():
+    grid = Grid(((2, -1), (1, 0)))
+    pipe = grid[0][1]
+    # Test pipe without parent is open
+    assert pipe.is_open()
+    # Test pipe with parent is not open
+    grid[0][0].child = pipe
+    assert not pipe.is_open()
