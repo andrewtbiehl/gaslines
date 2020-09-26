@@ -181,3 +181,104 @@ def test_is_open_with_pipe_conditional_on_parent():
     # Test pipe with parent is not open
     grid[0][0].child = pipe
     assert not pipe.is_open()
+
+
+def test_is_on_new_segment_with_source_returns_false():
+    grid = Grid(((2, -1, -1), (-1, -1, -1), (1, -1, 0)))
+    assert not grid[0][0].is_on_new_segment()
+    assert not grid[2][0].is_on_new_segment()
+
+
+def test_is_on_new_segment_with_open_point_returns_false():
+    grid = Grid(((2, -1, -1), (-1, -1, -1), (1, -1, 0)))
+    assert not grid[0][1].is_on_new_segment()
+    assert not grid[1][1].is_on_new_segment()
+    assert not grid[1][2].is_on_new_segment()
+
+
+def test_is_on_new_segment_with_sink_returns_false():
+    grid = Grid(((2, -1, -1), (-1, -1, -1), (1, -1, 0)))
+    sink = grid[2][2]
+    # Test sink with no parents
+    assert not sink.is_on_new_segment()
+    # Test sink with one parent
+    grid[0][0].child = grid[0][1]
+    grid[0][1].child = grid[0][2]
+    grid[0][2].child = grid[1][2]
+    grid[1][2].child = sink
+    assert not sink.is_on_new_segment()
+    # Test sink with all parents
+    grid[2][0].child = grid[2][1]
+    grid[2][1].child = sink
+    assert not sink.is_on_new_segment()
+
+
+def test_is_on_new_segment_with_first_segment_returns_false():
+    grid = Grid(((2, -1, -1), (-1, -1, -1), (1, -1, 0)))
+    # Test first point on first segment
+    grid[0][0].child = grid[0][1]
+    assert not grid[0][1].is_on_new_segment()
+    # Test second point on first segment
+    grid[0][1].child = grid[0][2]
+    assert not grid[0][2].is_on_new_segment()
+
+
+def test_is_on_new_segment_with_new_segment_returns_true():
+    grid = Grid(((2, -1, -1), (-1, -1, -1), (1, -1, 0)))
+    point = grid[1][2]
+    grid[0][0].child = grid[0][1]
+    grid[0][1].child = grid[0][2]
+    grid[0][2].child = point
+    assert point.is_on_new_segment()
+
+
+def test_is_on_new_segment_with_old_segment_returns_false():
+    grid = Grid(((2, -1, -1), (-1, -1, -1), (1, -1, 0)))
+    point = grid[2][1]
+    grid[0][0].child = grid[0][1]
+    grid[0][1].child = grid[1][1]
+    grid[1][1].child = point
+    assert not point.is_on_new_segment()
+
+
+def test_get_remaining_segments_with_source_returns_type():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    assert grid[0][0].get_remaining_segments() == grid[0][0]._type == 3
+    assert grid[1][1].get_remaining_segments() == grid[1][1]._type == 2
+
+
+def test_get_remaining_segments_with_open_point_returns_none():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    assert grid[0][1].get_remaining_segments() is None
+    assert grid[1][0].get_remaining_segments() is None
+    assert grid[2][1].get_remaining_segments() is None
+
+
+def test_get_remaining_segments_with_sink_returns_none():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    assert grid[2][0].get_remaining_segments() is None
+
+
+def test_get_remaining_segments_with_first_segment_returns_no_change():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    # Test first point on first segment
+    grid[0][0].child = grid[0][1]
+    assert grid[0][1].get_remaining_segments() == 3
+    # Test second point on first segment
+    grid[0][1].child = grid[0][2]
+    assert grid[0][2].get_remaining_segments() == 3
+
+
+def test_get_remaining_segments_with_new_segment_returns_change():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    # Test first point on second segment
+    grid[0][0].child = grid[0][1]
+    grid[0][1].child = grid[0][2]
+    grid[0][2].child = grid[1][2]
+    assert grid[1][2].get_remaining_segments() == 2
+    # Test second point on second segment has no change
+    grid[1][2].child = grid[2][2]
+    assert grid[2][2].get_remaining_segments() == 2
+    # Test first point on third segment
+    grid[2][2].child = grid[2][1]
+    assert grid[2][1].get_remaining_segments() == 1

@@ -103,3 +103,51 @@ class Point:
         Sink points always display as open
         """
         return not self.is_source() and not self.has_parent()
+
+    def is_on_new_segment(self):
+        """
+        Helper method used by get_remaining_segments to determine whether this is the
+        beginning of a new straight line segment along the directed path from source
+        to sink
+
+        Exception: the first segment after a source point is considered a "freebie"
+
+        Example: consider the following two partial paths.
+
+        a--->b--->c
+
+        a--->b
+             |
+             v
+             c
+
+        In the first path, this method would say that the point labeled "c" is not on
+        a new line segment, because the segment that that point is on extends at least
+        as far back as point "a". In contrast, this method would say that "c" is on a
+        new segment in the second path, because the path bends immediately prior to
+        encountering point "c".
+        """
+        # Sources and open nodes (including sinks) are irrelevant
+        if not self.has_parent():
+            return False
+        parent = self.parent
+        # The first segment after a source point is considered a "freebie"
+        if not parent.has_parent():
+            return False
+        # Check whether this is in a different row from its grandparent
+        # Use of row over column was an arbitrary decision
+        return abs(parent.parent.row_index - self.row_index) == 1
+
+    def get_remaining_segments(self):
+        """
+        Returns the exact number of remaining straight line segments required to
+        connect this point to a sink
+        """
+        # It doesn't make sense to request the remaining segments of an open point
+        if self.is_open():
+            return None
+        # Base case: number of remaining segments is fixed if the point is a source
+        if self.is_source():
+            return self._type
+        # Recursive case: remaining segments of parent, minus one if on new segment
+        return self.parent.get_remaining_segments() - self.is_on_new_segment()
