@@ -137,3 +137,17 @@ class Point:
         # Check whether this is in a different row from its grandparent
         # Use of row over column was an arbitrary decision
         return abs(parent.parent.row_index - self.row_index) == 1
+
+    def get_remaining_segments(self):
+        """
+        Returns the exact number of remaining straight line segments required to
+        connect this point to a sink
+        """
+        # It doesn't make sense to request the remaining segments of an open point
+        if self.is_open():
+            return None
+        # Base case: number of remaining segments is fixed if the point is a source
+        if self.is_source():
+            return self._type
+        # Recursive case: remaining segments of parent, minus one if on new segment
+        return self.parent.get_remaining_segments() - self.is_on_new_segment()
