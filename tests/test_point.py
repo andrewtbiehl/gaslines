@@ -339,3 +339,59 @@ def test_str_with_pipe_returns_interpunct():
 def test_str_with_sink_returns_asterisk():
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
     assert str(grid[2][0]) == "*"
+
+
+def test_is_head_with_clean_puzzle_returns_sources():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    sources_found = 0
+    for row in grid:
+        for point in row:
+            if point.is_source():
+                sources_found += 1
+                assert point.is_head()
+            else:
+                assert not point.is_head()
+    assert sources_found == 2
+
+
+def test_is_head_with_head_pipe_returns_true():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    grid[0][0].child = grid[0][1]
+    assert not grid[0][0].is_head()
+    assert grid[0][1].is_head()
+
+
+def test_is_head_with_sink_returns_false():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    # Test sink with no parents
+    assert not grid[2][0].is_head()
+    # Set path from "3"
+    grid[0][0].child = grid[0][1]
+    grid[0][1].child = grid[0][2]
+    grid[0][2].child = grid[1][2]
+    grid[1][2].child = grid[2][2]
+    grid[2][2].child = grid[2][1]
+    grid[2][1].child = grid[2][0]
+    # Test sink with one parent
+    assert not grid[2][0].is_head()
+    # Set path from "2"
+    grid[1][1].child = grid[1][0]
+    grid[1][0].child = grid[2][0]
+    # Test sink with all parents
+    assert not grid[2][0].is_head()
+
+
+def test_is_head_complete_puzzle_returns_no_heads():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    # Set path from "3"
+    grid[0][0].child = grid[0][1]
+    grid[0][1].child = grid[0][2]
+    grid[0][2].child = grid[1][2]
+    grid[1][2].child = grid[2][2]
+    grid[2][2].child = grid[2][1]
+    grid[2][1].child = grid[2][0]
+    # Set path from "2"
+    grid[1][1].child = grid[1][0]
+    grid[1][0].child = grid[2][0]
+    # Test that there are no heads anymore
+    assert not [point for row in grid for point in row if point.is_head()]
