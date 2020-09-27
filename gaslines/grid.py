@@ -1,4 +1,5 @@
 from gaslines.point import Point
+from gaslines.utility import Direction
 
 
 class Grid:
@@ -27,3 +28,39 @@ class Grid:
     @property
     def length(self):
         return self._length
+
+    def __str__(self):
+        """
+        Returns a Unicode representation of the grid in its current state
+        """
+        lines = []
+        for row in self:
+            row_relationships, column_relationships = [], []
+            for point in row:
+                # Add a representation of the point and its eastern relationship
+                row_relationships.append(str(point))
+                row_relationships.append(Grid._get_row_relationship(point))
+                # Add a representation of the point's southern relationship
+                column_relationships.append(Grid._get_column_relationship(point))
+            # Concatenate row_relationships, discarding the excess row_relationship
+            lines.append("".join(row_relationships[:-1]))
+            # Concatenate column_relationships
+            lines.append("   ".join(column_relationships))
+        # Concatenate all lines, discarding the excess column_relationship
+        return "\n".join(lines[:-1])
+
+    @staticmethod
+    def _get_row_relationship(point):
+        """
+        Helper method that returns a Unicode representation of a point's eastern
+        relationship
+        """
+        return "---" if point.has_relationship(Direction.EAST) else "   "
+
+    @staticmethod
+    def _get_column_relationship(point):
+        """
+        Helper method that returns a Unicode representation of a point's southern
+        relationship
+        """
+        return "|" if point.has_relationship(Direction.SOUTH) else " "

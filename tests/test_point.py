@@ -322,3 +322,20 @@ def test_has_relationship_with_no_neighbor_returns_false():
     assert not grid[0][0].has_relationship(Direction.NORTH)
     assert not grid[0][0].has_relationship(Direction.WEST)
     assert not grid[0][1].has_relationship(Direction.NORTH)
+
+
+def test_str_with_source_returns_type():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    assert str(grid[0][0]) == "3"
+    assert str(grid[1][1]) == "2"
+
+
+def test_str_with_pipe_returns_interpunct():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    for i, j in ((0, 1), (0, 2), (1, 2), (2, 1)):
+        assert str(grid[i][j]) == chr(183) == "·"
+
+
+def test_str_with_sink_returns_asterisk():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    assert str(grid[2][0]) == "*"
