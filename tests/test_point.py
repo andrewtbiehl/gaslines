@@ -282,3 +282,43 @@ def test_get_remaining_segments_with_new_segment_returns_change():
     # Test first point on third segment
     grid[2][2].child = grid[2][1]
     assert grid[2][1].get_remaining_segments() == 1
+
+
+def test_has_relationship_with_no_relationship_returns_false():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    for direction in Direction:
+        assert not grid[1][1].has_relationship(direction)
+
+
+def test_has_relationship_with_relationship_returns_true():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    # Set path from "3"
+    grid[0][0].child = grid[0][1]
+    grid[0][1].child = grid[0][2]
+    grid[0][2].child = grid[1][2]
+    grid[1][2].child = grid[2][2]
+    grid[2][2].child = grid[2][1]
+    grid[2][1].child = grid[2][0]
+    # Set path from "2"
+    grid[1][1].child = grid[1][0]
+    grid[1][0].child = grid[2][0]
+    # Test north center pipe point
+    assert grid[0][0].has_relationship(Direction.EAST)
+    assert grid[0][1].has_relationship(Direction.WEST)
+    assert grid[0][1].has_relationship(Direction.EAST)
+    assert grid[0][2].has_relationship(Direction.WEST)
+    # Test center center source point
+    assert grid[1][1].has_relationship(Direction.WEST)
+    assert grid[1][0].has_relationship(Direction.EAST)
+    # Test south west sink point
+    assert grid[1][0].has_relationship(Direction.SOUTH)
+    assert grid[2][0].has_relationship(Direction.NORTH)
+    assert grid[2][0].has_relationship(Direction.EAST)
+    assert grid[2][1].has_relationship(Direction.WEST)
+
+
+def test_has_relationship_with_no_neighbor_returns_false():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    assert not grid[0][0].has_relationship(Direction.NORTH)
+    assert not grid[0][0].has_relationship(Direction.WEST)
+    assert not grid[0][1].has_relationship(Direction.NORTH)

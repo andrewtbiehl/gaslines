@@ -79,6 +79,20 @@ class Point:
             if self.has_neighbor(direction)
         )
 
+    def has_relationship(self, direction):
+        """
+        Returns whether this is related to the adjacent point in the direction
+        specified
+
+        No relationship (False) includes a situation where the adjacent point does not
+        exist
+        """
+        if not self.has_neighbor(direction):
+            return False
+        neighbor = self.get_neighbor(direction)
+        # Note: we cannot use self.parent here because sinks may have multiple parents
+        return self.child is neighbor or neighbor.child is self
+
     @property
     def parent(self):
         """
