@@ -2,6 +2,23 @@ import pytest
 from gaslines.grid import Grid
 
 
+GRID_STRING_1 = """\
+3   ·   ·
+         
+·   2   ·
+         
+*   ·   ·\
+"""
+
+GRID_STRING_2 = """\
+3---·---·
+        |
+·---2   ·
+|       |
+*---·---·\
+"""
+
+
 @pytest.mark.parametrize(
     "input_grid", (((-1,), (-1,)), ((1, 0), (-1, -1)), ((-1,), (-1,), (-1,)))
 )
@@ -34,3 +51,23 @@ def test_subscripting_returns_correct_points():
     # Test that the third row only has sources
     for point in grid[2]:
         assert point.is_source()
+
+
+def test_str_with_empty_board_returns_correct_string():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    assert str(grid) == GRID_STRING_1
+
+
+def test_str_with_complete_board_returns_correct_string():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    # Set path from "3"
+    grid[0][0].child = grid[0][1]
+    grid[0][1].child = grid[0][2]
+    grid[0][2].child = grid[1][2]
+    grid[1][2].child = grid[2][2]
+    grid[2][2].child = grid[2][1]
+    grid[2][1].child = grid[2][0]
+    # Set path from "2"
+    grid[1][1].child = grid[1][0]
+    grid[1][0].child = grid[2][0]
+    assert str(grid) == GRID_STRING_2
