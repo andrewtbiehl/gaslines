@@ -165,3 +165,17 @@ class Point:
             return self._type
         # Recursive case: remaining segments of parent, minus one if on new segment
         return self.parent.get_remaining_segments() - self.is_on_new_segment()
+
+    def __str__(self):
+        """
+        Returns a single Unicode character representation of the (type of) point
+
+        For sources, this character is a digit, representing the number of remaining
+        segments to connect that point to a sink
+        """
+        if self.is_sink():
+            return "*"
+        if self.is_source():
+            return str(self.get_remaining_segments())
+        # For pipe points, return the interpunct character, "·"
+        return chr(183)
