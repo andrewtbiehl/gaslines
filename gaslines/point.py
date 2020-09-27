@@ -118,6 +118,15 @@ class Point:
         """
         return not self.is_source() and not self.has_parent()
 
+    def is_head(self):
+        """
+        Returns whether this is the current "head" of a path from source to sink
+
+        Sink nodes are not considered heads so a complete path from source to sink is
+        headless. As a consequence of this, a completed puzzle has no heads.
+        """
+        return not self.is_open() and not self.has_child()
+
     def is_on_new_segment(self):
         """
         Helper method used by get_remaining_segments to determine whether this is the
