@@ -129,7 +129,7 @@ class Point:
 
     def is_on_new_segment(self):
         """
-        Helper method used by get_remaining_segments to determine whether this is the
+        Helper method used by remaining_segments to determine whether this is the
         beginning of a new straight line segment along the directed path from source
         to sink
 
@@ -161,7 +161,8 @@ class Point:
         # Use of row over column was an arbitrary decision
         return abs(parent.parent.row_index - self.row_index) == 1
 
-    def get_remaining_segments(self):
+    @property
+    def remaining_segments(self):
         """
         Returns the exact number of remaining straight line segments required to
         connect this point to a sink
@@ -173,7 +174,7 @@ class Point:
         if self.is_source():
             return self._type
         # Recursive case: remaining segments of parent, minus one if on new segment
-        return self.parent.get_remaining_segments() - self.is_on_new_segment()
+        return self.parent.remaining_segments - self.is_on_new_segment()
 
     def __str__(self):
         """
@@ -185,6 +186,6 @@ class Point:
         if self.is_sink():
             return "*"
         if self.is_source():
-            return str(self.get_remaining_segments())
+            return str(self.remaining_segments)
         # For pipe points, return the interpunct character, "·"
         return chr(183)
