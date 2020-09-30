@@ -127,7 +127,7 @@ class Point:
         """
         return not self.is_open() and not self.has_child()
 
-    def is_on_new_segment(self):
+    def is_on_different_segment(self):
         """
         Helper method used by remaining_segments to determine whether this is the
         beginning of a new straight line segment along the directed path from source
@@ -174,7 +174,7 @@ class Point:
         if self.is_source():
             return self._type
         # Recursive case: remaining segments of parent, minus one if on new segment
-        return self.parent.remaining_segments - self.is_on_new_segment()
+        return self.parent.remaining_segments - self.is_on_different_segment()
 
     def __str__(self):
         """
