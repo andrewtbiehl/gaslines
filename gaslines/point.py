@@ -127,39 +127,24 @@ class Point:
         """
         return not self.is_open() and not self.has_child()
 
-    def is_on_new_segment(self):
+    def is_on_different_segment(self, neighbor):
         """
-        Helper method used by remaining_segments to determine whether this is the
-        beginning of a new straight line segment along the directed path from source
-        to sink
+        Determines whether this is on a different straight line segment from the given
+        neighbor, along the directed path from source to sink
 
-        Exception: the first segment after a source point is considered a "freebie"
+        Correct usage of this method presupposes that the neighbor provided either
+        has a single parent or is a source point
 
-        Example: consider the following two partial paths.
-
-        a--->b--->c
-
-        a--->b
-             |
-             v
-             c
-
-        In the first path, this method would say that the point labeled "c" is not on
-        a new line segment, because the segment that that point is on extends at least
-        as far back as point "a". In contrast, this method would say that "c" is on a
-        new segment in the second path, because the path bends immediately prior to
-        encountering point "c".
+        The child of a source point is not considered to be on a different segment
+        from its parent, even though its parent is not preceded by a segment
         """
-        # Sources and open nodes (including sinks) are irrelevant
-        if not self.has_parent():
-            return False
-        parent = self.parent
         # The first segment after a source point is considered a "freebie"
-        if not parent.has_parent():
+        # Non-source neighbors without parents are irrelevant
+        if not neighbor.has_parent():
             return False
-        # Check whether this is in a different row from its grandparent
+        # Check whether this is in a different row from the parent of its neighbor
         # Use of row over column was an arbitrary decision
-        return abs(parent.parent.row_index - self.row_index) == 1
+        return abs(neighbor.parent.row_index - self.row_index) == 1
 
     @property
     def remaining_segments(self):
@@ -174,7 +159,8 @@ class Point:
         if self.is_source():
             return self._type
         # Recursive case: remaining segments of parent, minus one if on new segment
-        return self.parent.remaining_segments - self.is_on_new_segment()
+        parent = self.parent
+        return parent.remaining_segments - self.is_on_different_segment(parent)
 
     def __str__(self):
         """
