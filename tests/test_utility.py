@@ -1,6 +1,5 @@
 import pytest
 from gaslines.utility import Direction
-from gaslines.utility import index
 
 
 def test_direction_returns_valid_direction():
@@ -17,14 +16,3 @@ def test_list_returns_expected_direction_order():
         Direction.SOUTH,
         Direction.WEST,
     ]
-
-
-def test_index_with_value_present_returns_index():
-    list_ = ["a", "b", "c", "d"]
-    for i, value in enumerate(list_):
-        assert index(list_, value) == list_.index(value) == i
-
-
-def test_index_with_value_absent_returns_negative_one():
-    list_ = ["a", "b", "c", "d"]
-    assert index(list_, "e") == -1
