@@ -1,5 +1,5 @@
 from gaslines.grid import Grid
-from gaslines.solve import get_head, has_head, is_option
+from gaslines.solve import get_head, has_head, is_option, get_next
 
 
 def test_get_head_with_new_puzzle_returns_head():
@@ -116,3 +116,62 @@ def test_is_option_with_sink_and_greater_than_two_remaining_segments_returns_fal
     assert not is_option(current, grid[0][1])
     # Test sink on new segment
     assert not is_option(current, grid[1][2])
+
+
+def test_get_next_with_no_child_and_all_open_neighbors_returns_first_available():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    assert get_next(grid[0][0]).location == (0, 1)
+    assert get_next(grid[1][1]).location == (0, 1)
+
+
+def test_get_next_with_no_child_and_some_open_neighbors_returns_first_available():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    # Set partial path from "3"
+    grid[0][0].child = grid[0][1]
+    grid[0][1].child = grid[0][2]
+    grid[0][2].child = grid[1][2]
+    assert get_next(grid[1][1]).location == (2, 1)
+
+
+def test_get_next_with_no_child_and_no_open_neighbors_returns_none():
+    grid = Grid(((4, -1, 1), (0, -1, -1), (-1, -1, 0)))
+    # Set (incorrect) path from "4"
+    grid[0][0].child = grid[0][1]
+    grid[0][1].child = grid[1][1]
+    grid[1][1].child = grid[1][2]
+    grid[1][2].child = grid[2][2]
+    assert get_next(grid[1][2]) is None
+
+
+def test_get_next_with_one_remaining_segment_skips_point_on_new_segment():
+    grid = Grid(((-1, -1, -1, -1), (1, -1, -1, 0)))
+    grid[1][0].child = grid[1][1]
+    assert get_next(grid[1][1]).location == (1, 2)
+
+
+def test_get_next_with_two_remaining_segments_skips_sink_on_same_segment():
+    grid = Grid(((2, -1, 0), (-1, 0, -1)))
+    current = grid[0][1]
+    # Set partial path to current
+    grid[0][0].child = current
+    assert get_next(current).location == (1, 1)
+
+
+def test_get_next_with_greater_than_two_remaining_segments_skips_sinks():
+    grid = Grid(((-1, 0, -1), (4, -1, 0), (-1, -1, -1)))
+    current = grid[1][1]
+    # Set partial path to current
+    grid[1][0].child = current
+    assert get_next(current).location == (2, 1)
+
+
+def test_get_next_with_first_of_multiple_children_returns_next_child():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    grid[1][1].child = grid[0][1]
+    assert get_next(grid[1][1]).location == (1, 2)
+
+
+def test_get_next_with_last_child_returns_none():
+    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    grid[1][1].child = grid[1][0]
+    assert get_next(grid[1][1]) is None

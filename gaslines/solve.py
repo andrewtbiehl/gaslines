@@ -1,3 +1,21 @@
+def get_next(current):
+    """
+    Returns a valid neighbor of "current", in the current recursive state, that has
+    not yet been tried as its child, or None if all valid neighbors have been tried.
+    """
+    # Presumes that the order returned by get_neighbors is preserved over time
+    neighbors = current.get_neighbors()
+    # Get the index of the previously tested neighbor, the current child of "current"
+    child_index = -1 if not current.has_child() else neighbors.index(current.child)
+    # All untested neighbors occur strictly after the previously tested neighbor
+    untested_neighbors = neighbors[child_index + 1 :]
+    # Return the first of the untested neighbors that is worth considering
+    for neighbor in untested_neighbors:
+        if is_option(current, neighbor):
+            return neighbor
+    return None
+
+
 def is_option(current, neighbor):
     """
     Returns whether the neighbor is a valid option to be set as the child of current.
