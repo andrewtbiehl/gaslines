@@ -1,5 +1,14 @@
 import pytest
-from gaslines.utility import Direction
+from gaslines.utility import Direction, get_number_of_rows
+
+
+UNSOLVED_GRID_STRING = """\
+3   ·   ·
+         
+·   2   ·
+         
+*   ·   ·\
+"""
 
 
 def test_direction_returns_valid_direction():
@@ -16,3 +25,13 @@ def test_list_returns_expected_direction_order():
         Direction.SOUTH,
         Direction.WEST,
     ]
+
+
+@pytest.mark.parametrize(
+    "input_string,expected_number",
+    (("", 1), ("a", 1), ("\n", 2), ("a\nb\nc", 3), (UNSOLVED_GRID_STRING, 5)),
+)
+def test_get_number_of_rows_with_input_string_returns_expected_number(
+    input_string, expected_number
+):
+    assert get_number_of_rows(input_string) == expected_number
