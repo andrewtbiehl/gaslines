@@ -1,3 +1,32 @@
+from gaslines.utility import get_number_of_rows
+from gaslines.solve import has_head
+import time
+
+
+def reveal(strategy, delay):
+    """
+    Wraps the given strategy function with the additional functionality of displaying
+    intermediate search results in real time while solving a given Gas Lines grid.
+
+    Args:
+        strategy (Strategy class method): An algorithm for solving a Gas Lines grid.
+        delay (float): Amount of time (in seconds) to artificially delay between each
+            intermediate stage of the search.
+    """
+
+    def wrapper(grid, *args, **kwargs):
+        grid_image = str(grid)
+        # Clear all rows below the cursor, print the grid, pause, and then backtrack
+        Cursor.clear_below()
+        print(grid_image)
+        time.sleep(delay)
+        if has_head(grid):
+            Cursor.move_up(get_number_of_rows(grid_image))
+        return strategy(grid, *args, **kwargs)
+
+    return wrapper
+
+
 class Cursor:
     """
     Static class that holds functions that wrap more complex interactions with a
