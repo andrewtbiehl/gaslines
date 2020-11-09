@@ -3,6 +3,24 @@ from gaslines.solve import get_head, has_head, is_option, get_next, Strategy, so
 import pytest
 
 
+REVEAL_SEARCH_STRING = """\
+\x1b[J\
+2   ·
+     
+*   *
+\x1b[3A\
+\x1b[J\
+2---·
+     
+*   *
+\x1b[3A\
+\x1b[J\
+2---·
+    |
+*   *
+"""
+
+
 def test_get_head_with_new_puzzle_returns_head():
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
     assert has_head(grid)
@@ -353,3 +371,12 @@ def test_solve_with_real_august_9_example_solves_grid(strategy):
     assert grid[6][4].child.location == (6, 3)
     assert grid[6][5].child.location == (6, 4)
     assert grid[6][6].child.location == (6, 5)
+
+
+@pytest.mark.parametrize(
+    "strategy", (Strategy.full_recursive, Strategy.partial_recursive)
+)
+def test_solve_with_reveal_delay_activated_prints_accordingly(strategy, capsys):
+    grid = Grid(((2, -1), (0, 0)))
+    assert solve(grid, strategy, reveal_delay=0)
+    assert capsys.readouterr().out == REVEAL_SEARCH_STRING
