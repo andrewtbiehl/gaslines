@@ -18,7 +18,7 @@ jobs:
       - name: Determine project Python version
         run: |
           PYTHON_VERSION=$(jq --raw-output "._meta.requires.python_version" Pipfile.lock)
-          echo "::set-env name=PYTHON_VERSION::${PYTHON_VERSION}"
+          echo "PYTHON_VERSION=${PYTHON_VERSION}" >> ${GITHUB_ENV}
       - name: Install project Python
         uses: actions/setup-python@v2
         with:
@@ -26,9 +26,9 @@ jobs:
       - name: Get project Python path
         run: |
           PYTHON_CACHE_KEY=python-packages-${{hashFiles('Pipfile.lock')}}
-          echo "::set-env name=PYTHON_CACHE_KEY::${PYTHON_CACHE_KEY}"
+          echo "PYTHON_CACHE_KEY=${PYTHON_CACHE_KEY}" >> ${GITHUB_ENV}
           PYTHON_PATH=$(python -c "import sys, pathlib; print(pathlib.Path(sys.executable).parent.parent)")
-          echo "::set-env name=PYTHON_PATH::${PYTHON_PATH}"
+          echo "PYTHON_PATH=${PYTHON_PATH}" >> ${GITHUB_ENV}
       - name: Restore project Python cache
         id: restore-project-python-cache
         uses: actions/cache@v2
