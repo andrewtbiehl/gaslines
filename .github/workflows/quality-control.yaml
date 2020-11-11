@@ -14,13 +14,13 @@ jobs:
       PYTHON_PATH: ${{env.PYTHON_PATH}}
     steps:
       - name: Checkout project
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
       - name: Determine project Python version
         run: |
           PYTHON_VERSION=$(jq --raw-output "._meta.requires.python_version" Pipfile.lock)
           echo "PYTHON_VERSION=${PYTHON_VERSION}" >> ${GITHUB_ENV}
       - name: Install project Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v2.1.4
         with:
           python-version: ${{env.PYTHON_VERSION}}
       - name: Get project Python path
@@ -31,7 +31,7 @@ jobs:
           echo "PYTHON_PATH=${PYTHON_PATH}" >> ${GITHUB_ENV}
       - name: Restore project Python cache
         id: restore-project-python-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.3
         with:
           key: ${{env.PYTHON_CACHE_KEY}}
           path: ${{env.PYTHON_PATH}}
@@ -54,13 +54,13 @@ jobs:
     steps:
       # The following three steps are (unfortunately) required to set up the job
       - name: Checkout project
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
       - name: Install project Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v2.1.4
         with:
           python-version: ${{env.PYTHON_VERSION}}
       - name: Restore project Python cache
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.3
         with:
           key: ${{env.PYTHON_CACHE_KEY}}
           path: ${{env.PYTHON_PATH}}
@@ -80,13 +80,13 @@ jobs:
     steps:
       # The following three steps are (unfortunately) required to set up the job
       - name: Checkout project
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
       - name: Install project Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v2.1.4
         with:
           python-version: ${{env.PYTHON_VERSION}}
       - name: Restore project Python cache
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.3
         with:
           key: ${{env.PYTHON_CACHE_KEY}}
           path: ${{env.PYTHON_PATH}}
