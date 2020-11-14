@@ -44,20 +44,13 @@ def test_clear_below_prints_correct_code(capsys):
 
 
 def test_reveal_with_incomplete_puzzle_prints_and_backtracks(capsys):
-    # Mock out strategy function, set no delay, and use unsolved puzzle
-    strategy = lambda grid: None
-    delay = 0
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
-    # Method under test
-    reveal(strategy, delay)(grid)
+    # Test reveal with mocked out strategy function and no delay
+    reveal(strategy=lambda grid: None, delay=0)(grid)
     assert capsys.readouterr().out == f"\x1b[J{UNSOLVED_GRID_STRING}\n\x1b[5A"
 
 
 def test_reveal_with_complete_puzzle_prints_but_does_not_backtrack(capsys):
-    # Mock out strategy function and set no delay
-    strategy = lambda grid: None
-    delay = 0
-    # Use solved puzzle
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
     # Set path from "3"
     grid[0][0].child = grid[0][1]
@@ -69,6 +62,6 @@ def test_reveal_with_complete_puzzle_prints_but_does_not_backtrack(capsys):
     # Set path from "2"
     grid[1][1].child = grid[1][0]
     grid[1][0].child = grid[2][0]
-    # Method under test
-    reveal(strategy, delay)(grid)
+    # Test reveal with mocked out strategy function and no delay
+    reveal(strategy=lambda grid: None, delay=0)(grid)
     assert capsys.readouterr().out == f"\x1b[J{SOLVED_GRID_STRING}\n"

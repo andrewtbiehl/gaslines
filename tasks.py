@@ -1,4 +1,5 @@
-import invoke, sys
+import invoke
+import sys
 
 
 @invoke.task(name="format")
