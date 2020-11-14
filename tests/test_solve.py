@@ -18,7 +18,7 @@ REVEAL_SEARCH_STRING = """\
 2---·
     |
 *   *
-"""
+"""  # noqa: W293
 
 
 def test_get_head_with_new_puzzle_returns_head():

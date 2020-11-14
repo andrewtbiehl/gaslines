@@ -17,6 +17,14 @@ def check(context):
     print(" * black")
     print()
     failed = execute("black . --check")
+    print()
+    print(" * flake8")
+    print()
+    flake8_failed = execute("flake8 .")
+    # Upon flake8 success, print a message because flake8 doesn't do so on its own
+    if not flake8_failed:
+        print("No code quality issues found!")
+    failed = flake8_failed or failed
     sys.exit(failed)
 
 

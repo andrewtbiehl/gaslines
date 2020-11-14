@@ -8,7 +8,7 @@ UNSOLVED_GRID_STRING = """\
 ·   2   ·
          
 *   ·   ·\
-"""
+"""  # noqa: W293
 
 
 def test_direction_returns_valid_direction():

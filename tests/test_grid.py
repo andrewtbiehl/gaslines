@@ -8,7 +8,7 @@ GRID_STRING_1 = """\
 ·   2   ·
          
 *   ·   ·\
-"""
+"""  # noqa: W293
 
 GRID_STRING_2 = """\
 3---·---·
