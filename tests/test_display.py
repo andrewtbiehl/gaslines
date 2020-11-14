@@ -14,7 +14,7 @@ UNSOLVED_GRID_STRING = """\
 ·   2   ·
          
 *   ·   ·\
-"""
+"""  # noqa: W293
 
 
 SOLVED_GRID_STRING = """\
