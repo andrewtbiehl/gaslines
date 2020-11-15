@@ -1,6 +1,7 @@
-from gaslines.grid import Grid
-from gaslines.solve import get_head, has_head, is_option, get_next, Strategy, solve
 import pytest
+
+from gaslines.grid import Grid
+from gaslines.solve import Strategy, get_head, get_next, has_head, is_option, solve
 
 
 REVEAL_SEARCH_STRING = """\
