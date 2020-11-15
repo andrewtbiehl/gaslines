@@ -1,6 +1,7 @@
-from gaslines.utility import get_number_of_rows
-from gaslines.solve import has_head
 import time
+
+from gaslines.solve import has_head
+from gaslines.utility import get_number_of_rows
 
 
 def reveal(strategy, delay):

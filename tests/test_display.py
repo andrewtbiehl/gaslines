@@ -1,7 +1,7 @@
-from gaslines.display import Cursor, reveal
-from gaslines.grid import Grid
 import pytest
 
+from gaslines.display import Cursor, reveal
+from gaslines.grid import Grid
 
 # Note: these automated tests merely verify that the functions under test behave
 # consistently. Given the functions' visual nature, verification of correct behavior

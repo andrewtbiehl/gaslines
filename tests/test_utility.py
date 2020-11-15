@@ -1,6 +1,6 @@
 import pytest
-from gaslines.utility import Direction, get_number_of_rows
 
+from gaslines.utility import Direction, get_number_of_rows
 
 UNSOLVED_GRID_STRING = """\
 3   ·   ·

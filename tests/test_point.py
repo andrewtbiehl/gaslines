@@ -1,6 +1,7 @@
 import pytest
-from gaslines.point import Point
+
 from gaslines.grid import Grid
+from gaslines.point import Point
 from gaslines.utility import Direction
 
 
