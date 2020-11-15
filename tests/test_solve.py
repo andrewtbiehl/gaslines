@@ -3,6 +3,7 @@ import pytest
 from gaslines.grid import Grid
 from gaslines.solve import Strategy, get_head, get_next, has_head, is_option, solve
 
+
 REVEAL_SEARCH_STRING = """\
 \x1b[J\
 2   ·

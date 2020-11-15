@@ -2,6 +2,7 @@ import pytest
 
 from gaslines.grid import Grid
 
+
 GRID_STRING_1 = """\
 3   ·   ·
          
