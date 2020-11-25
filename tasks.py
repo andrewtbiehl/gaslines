@@ -9,6 +9,14 @@ def format_(context):
     print(" * black")
     print()
     failed = execute("black .")
+    print()
+    print(" * isort")
+    print()
+    isort_failed = execute("isort .")
+    # Upon isort success, print a message because isort doesn't do so on its own
+    if not isort_failed:
+        print("No import order issues found!")
+    failed = isort_failed or failed
     sys.exit(failed)
 
 
