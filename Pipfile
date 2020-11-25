@@ -10,6 +10,7 @@ pytest = "*"
 coverage = "*"
 coveralls = "*"
 flake8 = "*"
+isort = "*"
 
 [packages]
 
