@@ -34,6 +34,14 @@ def check(context):
     if not flake8_failed:
         print("No code quality issues found!")
     failed = flake8_failed or failed
+    print()
+    print(" * isort")
+    print()
+    isort_failed = execute("isort . --check-only")
+    # Upon isort success, print a message because isort doesn't do so on its own
+    if not isort_failed:
+        print("No import order issues found!")
+    failed = isort_failed or failed
     sys.exit(failed)
 
 
