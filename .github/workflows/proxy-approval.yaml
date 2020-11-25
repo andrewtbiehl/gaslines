@@ -1,0 +1,22 @@
+# The following workflow runs upon the submission of a pull request review
+# If the review's summary comment is the same as this workflow's "TRIGGER_COMMENT",
+# the github-actions bot approves the pull request
+name: Proxy Approval
+on:
+  pull_request_review:
+    types: submitted
+jobs:
+  approve:
+    name: Approve
+    runs-on: ubuntu-18.04
+    timeout-minutes: 3
+    env:
+      # Defines the exact comment body that triggers an approval
+      TRIGGER_COMMENT: "@actions approve"
+    steps:
+      - name: Approve pull request
+        uses: hmarr/auto-approve-action@v2.0.0
+        # Approve the pull request only upon receiving the trigger comment
+        if: github.event.review.body == env.TRIGGER_COMMENT
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
