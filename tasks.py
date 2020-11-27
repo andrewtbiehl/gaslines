@@ -1,4 +1,5 @@
 import sys
+from collections import OrderedDict
 
 import invoke
 
@@ -15,45 +16,63 @@ echo "$output" && exit $code
 ISORT_SUCCESS_MESSAGE = "No import order issues found!"
 
 
+# A list of formatter tools to run
+# The keys are the tool names and the values are the shell commands
+FORMATTERS = OrderedDict(
+    (
+        ("black", "black ."),
+        (
+            "isort",
+            REPLACE_EMPTY_STDOUT_SCRIPT.format(
+                command="isort .", message=ISORT_SUCCESS_MESSAGE
+            ),
+        ),
+    )
+)
+
+
+# A list of check tools to run
+# The keys are the tool names and the values are the shell commands
+CHECKS = OrderedDict(
+    (
+        ("black", "black . --check"),
+        (
+            "flake8",
+            REPLACE_EMPTY_STDOUT_SCRIPT.format(
+                command="flake8 .", message="No code quality issues found!"
+            ),
+        ),
+        (
+            "isort",
+            REPLACE_EMPTY_STDOUT_SCRIPT.format(
+                command="isort . --check-only", message=ISORT_SUCCESS_MESSAGE
+            ),
+        ),
+    )
+)
+
+
 @invoke.task(name="format")
 def format_(context):
     print("----FORMAT-----------------------")
-    print(" * black")
-    print()
-    failed = execute("black .")
-    print()
-    print(" * isort")
-    print()
-    # Upon isort success, print a message because isort doesn't do so on its own
-    isort_command = REPLACE_EMPTY_STDOUT_SCRIPT.format(
-        command="isort .", message=ISORT_SUCCESS_MESSAGE
-    )
-    failed = execute(isort_command) or failed
+    failed = False
+    for name, command in FORMATTERS.items():
+        print(f" * {name}")
+        print()
+        failed = execute(command) or failed
+        print()
     sys.exit(failed)
 
 
 @invoke.task
 def check(context):
     print("----CHECK------------------------")
-    print(" * black")
-    print()
-    failed = execute("black . --check")
-    print()
-    print(" * flake8")
-    print()
-    # Upon flake8 success, print a message because flake8 doesn't do so on its own
-    flake8_command = REPLACE_EMPTY_STDOUT_SCRIPT.format(
-        command="flake8 .", message="No code quality issues found!"
-    )
-    failed = execute(flake8_command) or failed
-    print()
-    print(" * isort")
-    print()
-    # Upon isort success, print a message because isort doesn't do so on its own
-    isort_command = REPLACE_EMPTY_STDOUT_SCRIPT.format(
-        command="isort . --check-only", message=ISORT_SUCCESS_MESSAGE
-    )
-    failed = execute(isort_command) or failed
+    failed = False
+    for name, command in CHECKS.items():
+        print(f" * {name}")
+        print()
+        failed = execute(command) or failed
+        print()
     sys.exit(failed)
 
 
