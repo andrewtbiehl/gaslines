@@ -55,25 +55,13 @@ CHECKS = OrderedDict(
 @invoke.task(name="format")
 def format_(context):
     print("----FORMAT-----------------------")
-    failed = False
-    for name, command in FORMATTERS.items():
-        print(f" * {name}")
-        print()
-        failed = execute(command) or failed
-        print()
-    sys.exit(failed)
+    execute_sequentially(FORMATTERS)
 
 
 @invoke.task
 def check(context):
     print("----CHECK------------------------")
-    failed = False
-    for name, command in CHECKS.items():
-        print(f" * {name}")
-        print()
-        failed = execute(command) or failed
-        print()
-    sys.exit(failed)
+    execute_sequentially(CHECKS)
 
 
 @invoke.task
@@ -96,6 +84,24 @@ def test(context, coverage=None):
         print()
         failed = execute("coveralls") or failed
     failed = execute("rm .coverage") or failed
+    sys.exit(failed)
+
+
+def execute_sequentially(commands):
+    """
+    Helper function that runs a sequence of provided shell commands, prints their
+    associated names simultaneously, and returns an error if any command failed.
+
+    Args:
+        commands (OrderedDict): Essentially a sequence of shell commands to execute.
+            The values are the actual commands and the keys are their names.
+    """
+    failed = False
+    for name, command in commands.items():
+        print(f" * {name}")
+        print()
+        failed = execute(command) or failed
+        print()
     sys.exit(failed)
 
 
