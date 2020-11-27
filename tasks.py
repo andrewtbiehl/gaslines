@@ -3,6 +3,15 @@ import sys
 import invoke
 
 
+# Simple shell script that replaces empty standard output with a custom message
+# Used as a wrapper for commands that print nothing upon success
+REPLACE_EMPTY_STDOUT_SCRIPT = """\
+output=$({command}); code=$?;
+if [ $code -eq 0 ] && [ -z "$output" ]; then output="{message}"; fi
+echo "$output" && exit $code
+"""
+
+
 ISORT_SUCCESS_MESSAGE = "No import order issues found!"
 
 
@@ -15,11 +24,11 @@ def format_(context):
     print()
     print(" * isort")
     print()
-    isort_failed = execute("isort .")
     # Upon isort success, print a message because isort doesn't do so on its own
-    if not isort_failed:
-        print(ISORT_SUCCESS_MESSAGE)
-    failed = isort_failed or failed
+    isort_command = REPLACE_EMPTY_STDOUT_SCRIPT.format(
+        command="isort .", message=ISORT_SUCCESS_MESSAGE
+    )
+    failed = execute(isort_command) or failed
     sys.exit(failed)
 
 
@@ -32,19 +41,19 @@ def check(context):
     print()
     print(" * flake8")
     print()
-    flake8_failed = execute("flake8 .")
     # Upon flake8 success, print a message because flake8 doesn't do so on its own
-    if not flake8_failed:
-        print("No code quality issues found!")
-    failed = flake8_failed or failed
+    flake8_command = REPLACE_EMPTY_STDOUT_SCRIPT.format(
+        command="flake8 .", message="No code quality issues found!"
+    )
+    failed = execute(flake8_command) or failed
     print()
     print(" * isort")
     print()
-    isort_failed = execute("isort . --check-only")
     # Upon isort success, print a message because isort doesn't do so on its own
-    if not isort_failed:
-        print(ISORT_SUCCESS_MESSAGE)
-    failed = isort_failed or failed
+    isort_command = REPLACE_EMPTY_STDOUT_SCRIPT.format(
+        command="isort . --check-only", message=ISORT_SUCCESS_MESSAGE
+    )
+    failed = execute(isort_command) or failed
     sys.exit(failed)
 
 
