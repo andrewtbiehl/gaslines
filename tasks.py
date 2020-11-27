@@ -3,6 +3,9 @@ import sys
 import invoke
 
 
+ISORT_SUCCESS_MESSAGE = "No import order issues found!"
+
+
 @invoke.task(name="format")
 def format_(context):
     print("----FORMAT-----------------------")
@@ -15,7 +18,7 @@ def format_(context):
     isort_failed = execute("isort .")
     # Upon isort success, print a message because isort doesn't do so on its own
     if not isort_failed:
-        print("No import order issues found!")
+        print(ISORT_SUCCESS_MESSAGE)
     failed = isort_failed or failed
     sys.exit(failed)
 
@@ -40,7 +43,7 @@ def check(context):
     isort_failed = execute("isort . --check-only")
     # Upon isort success, print a message because isort doesn't do so on its own
     if not isort_failed:
-        print("No import order issues found!")
+        print(ISORT_SUCCESS_MESSAGE)
     failed = isort_failed or failed
     sys.exit(failed)
 
