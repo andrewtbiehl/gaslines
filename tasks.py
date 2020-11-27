@@ -1,48 +1,67 @@
 import sys
+from collections import OrderedDict
 
 import invoke
+
+
+# Simple shell script that replaces empty standard output with a custom message
+# Used as a wrapper for commands that print nothing upon success
+REPLACE_EMPTY_STDOUT_SCRIPT = """\
+output=$({command}); code=$?;
+if [ $code -eq 0 ] && [ -z "$output" ]; then output="{message}"; fi
+echo "$output" && exit $code
+"""
+
+
+ISORT_SUCCESS_MESSAGE = "No import order issues found!"
+
+
+# A list of formatter tools to run
+# The keys are the tool names and the values are the shell commands
+FORMATTERS = OrderedDict(
+    (
+        ("black", "black ."),
+        (
+            "isort",
+            REPLACE_EMPTY_STDOUT_SCRIPT.format(
+                command="isort .", message=ISORT_SUCCESS_MESSAGE
+            ),
+        ),
+    )
+)
+
+
+# A list of check tools to run
+# The keys are the tool names and the values are the shell commands
+CHECKS = OrderedDict(
+    (
+        ("black", "black . --check"),
+        (
+            "flake8",
+            REPLACE_EMPTY_STDOUT_SCRIPT.format(
+                command="flake8 .", message="No code quality issues found!"
+            ),
+        ),
+        (
+            "isort",
+            REPLACE_EMPTY_STDOUT_SCRIPT.format(
+                command="isort . --check-only", message=ISORT_SUCCESS_MESSAGE
+            ),
+        ),
+    )
+)
 
 
 @invoke.task(name="format")
 def format_(context):
     print("----FORMAT-----------------------")
-    print(" * black")
-    print()
-    failed = execute("black .")
-    print()
-    print(" * isort")
-    print()
-    isort_failed = execute("isort .")
-    # Upon isort success, print a message because isort doesn't do so on its own
-    if not isort_failed:
-        print("No import order issues found!")
-    failed = isort_failed or failed
-    sys.exit(failed)
+    execute_sequentially(FORMATTERS)
 
 
 @invoke.task
 def check(context):
     print("----CHECK------------------------")
-    print(" * black")
-    print()
-    failed = execute("black . --check")
-    print()
-    print(" * flake8")
-    print()
-    flake8_failed = execute("flake8 .")
-    # Upon flake8 success, print a message because flake8 doesn't do so on its own
-    if not flake8_failed:
-        print("No code quality issues found!")
-    failed = flake8_failed or failed
-    print()
-    print(" * isort")
-    print()
-    isort_failed = execute("isort . --check-only")
-    # Upon isort success, print a message because isort doesn't do so on its own
-    if not isort_failed:
-        print("No import order issues found!")
-    failed = isort_failed or failed
-    sys.exit(failed)
+    execute_sequentially(CHECKS)
 
 
 @invoke.task
@@ -65,6 +84,24 @@ def test(context, coverage=None):
         print()
         failed = execute("coveralls") or failed
     failed = execute("rm .coverage") or failed
+    sys.exit(failed)
+
+
+def execute_sequentially(commands):
+    """
+    Helper function that runs a sequence of provided shell commands, prints their
+    associated names simultaneously, and returns an error if any command failed.
+
+    Args:
+        commands (OrderedDict): Essentially a sequence of shell commands to execute.
+            The values are the actual commands and the keys are their names.
+    """
+    failed = False
+    for name, command in commands.items():
+        print(f" * {name}")
+        print()
+        failed = execute(command) or failed
+        print()
     sys.exit(failed)
 
 
