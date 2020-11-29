@@ -1,3 +1,9 @@
+"""
+Tasks module used by the Invoke task execution tool. Run `invoke --list` from the
+command line for more information on which tasks are available to run.
+"""
+
+
 import sys
 from collections import OrderedDict
 
