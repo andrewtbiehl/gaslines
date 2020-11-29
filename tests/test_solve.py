@@ -1,3 +1,6 @@
+"""All unit tests for the gaslines solve module."""
+
+
 import pytest
 
 from gaslines.grid import Grid

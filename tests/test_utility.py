@@ -1,3 +1,6 @@
+"""All unit tests for the gaslines utility module."""
+
+
 import pytest
 
 from gaslines.utility import Direction, get_number_of_rows

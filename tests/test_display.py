@@ -1,3 +1,6 @@
+"""All unit tests for the gaslines display module."""
+
+
 import pytest
 
 from gaslines.display import Cursor, reveal
