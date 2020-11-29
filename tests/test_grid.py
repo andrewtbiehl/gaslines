@@ -24,12 +24,14 @@ GRID_STRING_2 = """\
     "input_grid", (((-1,), (-1,)), ((1, 0), (-1, -1)), ((-1,), (-1,), (-1,)))
 )
 def test_dimensions_return_dimensions_when_asked(input_grid):
+    """Verifies that the height and length properties return the correct values."""
     output_grid = Grid(input_grid)
     assert output_grid.height == len(input_grid)
     assert output_grid.length == len(input_grid[0])
 
 
 def test_subscripting_returns_correct_points():
+    """Verifies that the subscript operator works as expected."""
     grid = Grid(
         (
             (-1, -1, -1),
@@ -55,11 +57,13 @@ def test_subscripting_returns_correct_points():
 
 
 def test_str_with_empty_board_returns_correct_string():
+    """Verifies that the string representation of an unsolved grid is correct."""
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
     assert str(grid) == GRID_STRING_1
 
 
 def test_str_with_complete_board_returns_correct_string():
+    """Verifies that the string representation of a solved grid is correct."""
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
     # Set path from "3"
     grid[0][0].child = grid[0][1]

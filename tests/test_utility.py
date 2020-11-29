@@ -13,6 +13,7 @@ UNSOLVED_GRID_STRING = """\
 
 
 def test_direction_returns_valid_direction():
+    """Verifies that the Direction enum stores the correct direction vectors."""
     assert Direction.NORTH.value == (-1, 0)
     assert Direction.EAST.value == (0, 1)
     assert Direction.SOUTH.value == (1, 0)
@@ -20,6 +21,7 @@ def test_direction_returns_valid_direction():
 
 
 def test_list_returns_expected_direction_order():
+    """Verifies that listing the Direction elements returns the expected order."""
     assert list(Direction) == [
         Direction.NORTH,
         Direction.EAST,
@@ -35,4 +37,5 @@ def test_list_returns_expected_direction_order():
 def test_get_number_of_rows_with_input_string_returns_expected_number(
     input_string, expected_number
 ):
+    """Verifies that `get_number_of_rows` returns the expected number of rows."""
     assert get_number_of_rows(input_string) == expected_number
