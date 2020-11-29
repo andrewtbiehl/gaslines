@@ -1,3 +1,9 @@
+"""
+Tasks module used by the Invoke task execution tool. Run `invoke --list` from the
+command line for more information on which tasks are available to run.
+"""
+
+
 import sys
 from collections import OrderedDict
 
@@ -54,18 +60,41 @@ CHECKS = OrderedDict(
 
 @invoke.task(name="format")
 def format_(context):
+    """
+    Runs all formatting tools configured for use with this project.
+
+    Currently, this includes:
+    - black
+    - isort
+    """
     print("----FORMAT-----------------------")
     execute_sequentially(FORMATTERS)
 
 
 @invoke.task
 def check(context):
+    """
+    Runs all code checks configured for use with this project.
+
+    Currently, this includes:
+    - black
+    - flake8
+    - isort
+    """
     print("----CHECK------------------------")
     execute_sequentially(CHECKS)
 
 
 @invoke.task
 def test(context, coverage=None):
+    """
+    Runs tests and reports on the current the code coverage.
+
+    Args:
+        coverage (String): Optional argument for specifying what to do with the
+            coverage report. If "write", writes out the report in html form. If
+            "upload", uploads the report to coveralls. Otherwise, does nothing.
+    """
     print("----TEST-------------------------")
     # Run tests
     print(" * pytest")

@@ -1,3 +1,9 @@
+"""
+Module that holds all utilities related to solving a Gas Lines puzzle. Most notably,
+this includes the various Gas Lines algorithms.
+"""
+
+
 import gaslines.display as display
 
 
@@ -153,4 +159,5 @@ def get_head(grid):
 
 
 def has_head(grid):
+    """Returns whether the given grid currently has a head."""
     return get_head(grid) is not None

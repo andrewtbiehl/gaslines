@@ -1,3 +1,6 @@
+"""All unit tests for the gaslines display module."""
+
+
 import pytest
 
 from gaslines.display import Cursor, reveal
@@ -29,22 +32,26 @@ SOLVED_GRID_STRING = """\
 
 @pytest.mark.parametrize("number_of_rows", (1, 2, 11, 101))
 def test_move_up_with_positive_number_prints_correct_code(capsys, number_of_rows):
+    """Verifies that `move_up` prints the expected terminal control code."""
     Cursor.move_up(number_of_rows)
     assert capsys.readouterr().out == f"\x1b[{number_of_rows}A"
 
 
 @pytest.mark.parametrize("number_of_rows", (0, -1, -2, -11, -101))
 def test_move_up_with_non_positive_number_does_nothing(capsys, number_of_rows):
+    """Verifies that `move_up` with a non-positive number prints nothing."""
     Cursor.move_up(number_of_rows)
     assert capsys.readouterr().out == ""
 
 
 def test_clear_below_prints_correct_code(capsys):
+    """Verifies that `clear_below` prints the expected terminal control code."""
     Cursor.clear_below()
     assert capsys.readouterr().out == "\x1b[J"
 
 
 def test_reveal_with_incomplete_puzzle_prints_and_backtracks(capsys):
+    """Verifies that `reveal` on an incomplete puzzle prints as expected."""
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
     # Test reveal with mocked out strategy function and no delay
     reveal(strategy=lambda grid: None, delay=0)(grid)
@@ -52,6 +59,7 @@ def test_reveal_with_incomplete_puzzle_prints_and_backtracks(capsys):
 
 
 def test_reveal_with_complete_puzzle_prints_but_does_not_backtrack(capsys):
+    """Verifies that `reveal` on a complete puzzle prints as expected."""
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
     # Set path from "3"
     grid[0][0].child = grid[0][1]

@@ -1,3 +1,9 @@
+"""
+Module that holds miscellaneous, general-purpose utilities used throughout the
+gaslines package.
+"""
+
+
 from enum import Enum
 
 
