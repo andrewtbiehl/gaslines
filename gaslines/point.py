@@ -19,35 +19,51 @@ class Point:
 
     @property
     def grid(self):
+        """Returns the Grid object of which this point is a component."""
         return self._grid
 
     @property
     def location(self):
+        """
+        Returns an ordered pair comprising of the row- and column-index, respectively,
+        that determines this point's location in the grid.
+
+        The grid has a zero-based index with the origin in the top-right corner.
+        """
         return self._location
 
     @property
     def row_index(self):
+        """Returns the row index of the point in the grid."""
         return self.location[0]
 
     @property
     def column_index(self):
+        """Returns the column index of the point in the grid."""
         return self.location[1]
 
     def is_source(self):
+        """Returns whether the point is a 'source' point."""
         return self._type > 0
 
     def is_sink(self):
+        """Returns whether the point is a 'sink' point."""
         return self._type == Point.SINK
 
     @property
     def child(self):
+        """
+        Returns the child of this point, or None of this point currently has no child.
+        """
         return self._child
 
     @child.setter
     def child(self, point):
+        """Sets this point's child to the given point."""
         self._child = point
 
     def has_child(self):
+        """Returns whether this point has a child."""
         return self.child is not None
 
     def get_neighbor(self, direction):
@@ -63,6 +79,7 @@ class Point:
         return grid[i][j] if 0 <= i < grid.height and 0 <= j < grid.length else None
 
     def has_neighbor(self, direction):
+        """Returns whether this point has a neighbor in the given direction."""
         return self.get_neighbor(direction) is not None
 
     def get_neighbors(self):
@@ -108,6 +125,7 @@ class Point:
         return None
 
     def has_parent(self):
+        """Returns whether this point has a parent."""
         return self.parent is not None
 
     def is_open(self):

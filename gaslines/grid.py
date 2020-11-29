@@ -23,10 +23,12 @@ class Grid:
 
     @property
     def height(self):
+        """Returns the height (i.e., number of rows) of the grid."""
         return self._height
 
     @property
     def length(self):
+        """Returns the length (i.e., number of columns) of the grid."""
         return self._length
 
     def __str__(self):

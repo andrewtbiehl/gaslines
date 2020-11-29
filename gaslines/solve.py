@@ -153,4 +153,5 @@ def get_head(grid):
 
 
 def has_head(grid):
+    """Returns whether the given grid currently has a head."""
     return get_head(grid) is not None
