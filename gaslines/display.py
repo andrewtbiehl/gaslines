@@ -1,3 +1,9 @@
+"""
+Module that holds utilities specifically used to visualize Gas Lines puzzles and
+solutions in a standard terminal.
+"""
+
+
 import time
 
 from gaslines.solve import has_head

@@ -1,3 +1,9 @@
+"""
+Container module for the gaslines Grid class, which holds grid-specific data for a Gas
+Lines puzzle.
+"""
+
+
 from gaslines.point import Point
 from gaslines.utility import Direction
 

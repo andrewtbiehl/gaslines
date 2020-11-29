@@ -1,3 +1,9 @@
+"""
+Container module for the gaslines Point class, which holds all data specific to a
+single point on the grid of a Gas Lines puzzle.
+"""
+
+
 from gaslines.utility import Direction
 
 

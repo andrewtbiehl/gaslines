@@ -1,3 +1,9 @@
+"""
+Module that holds all utilities related to solving a Gas Lines puzzle. Most notably,
+this includes the various Gas Lines algorithms.
+"""
+
+
 import gaslines.display as display
 
 
