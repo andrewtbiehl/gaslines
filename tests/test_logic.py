@@ -1,10 +1,10 @@
-"""All unit tests for the gaslines solve module."""
+"""All unit tests for the gaslines logic module."""
 
 
 import pytest
 
 from gaslines.grid import Grid
-from gaslines.solve import Strategy, get_head, get_next, has_head, is_option, solve
+from gaslines.logic import Strategy, get_head, get_next, has_head, is_option, solve
 
 
 REVEAL_SEARCH_STRING = """\
