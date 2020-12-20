@@ -20,7 +20,7 @@ jobs:
           PYTHON_VERSION=$(jq --raw-output "._meta.requires.python_version" Pipfile.lock)
           echo "PYTHON_VERSION=${PYTHON_VERSION}" >> ${GITHUB_ENV}
       - name: Install project Python
-        uses: actions/setup-python@v2.1.4
+        uses: actions/setup-python@v2.2.1
         with:
           python-version: ${{env.PYTHON_VERSION}}
       - name: Get project Python path
@@ -56,7 +56,7 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v2.3.4
       - name: Install project Python
-        uses: actions/setup-python@v2.1.4
+        uses: actions/setup-python@v2.2.1
         with:
           python-version: ${{env.PYTHON_VERSION}}
       - name: Restore project Python cache
@@ -82,7 +82,7 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v2.3.4
       - name: Install project Python
-        uses: actions/setup-python@v2.1.4
+        uses: actions/setup-python@v2.2.1
         with:
           python-version: ${{env.PYTHON_VERSION}}
       - name: Restore project Python cache
