@@ -94,4 +94,5 @@ jobs:
       - name: Run tests
         env:
             GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+            COVERALLS_SERVICE_NAME: github
         run: invoke test --coverage=upload
