@@ -41,7 +41,8 @@ class Observable:
     can use its functionality out-of-the-box by specifying it as a base class.
     """
 
-    def __new__(cls):
+    def __new__(cls, *_args, **_kwargs):
+        # The args and kwargs may be used by __init__ but are not used here
         instance = super().__new__(cls)
         # Explicitly initialize the new instance as an Observable
         # This is done here so that a derived class won't have to do it itself
