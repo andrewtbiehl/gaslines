@@ -56,6 +56,10 @@ class Switch:
 class MockDerivedObservable(Observable):
     """A mock class used to test inheritance of the Observable class."""
 
+    # Mock __init__ method used to verify that Observables may have attributes
+    def __init__(self, value):
+        self.value = value
+
     @Observable.observe
     def mock_observed_method(self):
         """A mock method used to test the `observe` decorator functionality."""
@@ -94,8 +98,8 @@ def test_get_number_of_rows_with_input_string_returns_expected_number(
     "observable,method",
     (
         (Observable(), Observable.notify),
-        (MockDerivedObservable(), MockDerivedObservable.notify),
-        (MockDerivedObservable(), MockDerivedObservable.mock_observed_method),
+        (MockDerivedObservable(None), MockDerivedObservable.notify),
+        (MockDerivedObservable(None), MockDerivedObservable.mock_observed_method),
     ),
 )
 def test_observable_method_with_observers_notifies_observers(observable, method):
