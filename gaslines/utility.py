@@ -44,13 +44,10 @@ class Observable:
     def __new__(cls, *_args, **_kwargs):
         # The args and kwargs may be used by __init__ but are not used here
         instance = super().__new__(cls)
-        # Explicitly initialize the new instance as an Observable
-        # This is done here so that a derived class won't have to do it itself
-        Observable.__init__(instance)
+        # Explicitly initialize the list of observers
+        # This is done here to prevent the need for explicit initialization elsewhere
+        instance._observers = []
         return instance
-
-    def __init__(self):
-        self._observers = []
 
     def register(self, observer):
         """
