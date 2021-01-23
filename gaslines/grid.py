@@ -14,18 +14,40 @@ class Grid:
     """
 
     def __init__(self, grid):
-        self._grid = tuple(
-            tuple(Point(self, (i, j), type_) for j, type_ in enumerate(row))
-            for i, row in enumerate(grid)
-        )
-        self._height = len(self._grid)
-        self._length = len(self._grid[0])
+        # Initialize the grid using the following `__init__` helper methods
+        self._create_grid(grid)
+        self._set_height()
+        self._set_length()
 
     def __getitem__(self, row_index):
         """
         Returns the row at the specified index of the grid
         """
         return self._grid[row_index]
+
+    def _create_grid(self, grid):
+        """
+        Helper method for `__init__` that creates and stores an internal
+        representation of the grid based on the external description provided.
+
+        This helper method must be called prior to any of the others.
+        """
+        self._grid = tuple(
+            tuple(Point(self, (i, j), type_) for j, type_ in enumerate(row))
+            for i, row in enumerate(grid)
+        )
+
+    def _set_height(self):
+        """
+        Helper method for `__init__` that determines and stores the grid height.
+        """
+        self._height = len(self._grid)
+
+    def _set_length(self):
+        """
+        Helper method for `__init__` that determines and stores the grid length.
+        """
+        self._length = len(self._grid[0])
 
     @property
     def height(self):
