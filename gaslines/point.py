@@ -4,10 +4,10 @@ single point on the grid of a Gas Lines puzzle.
 """
 
 
-from gaslines.utility import Direction
+from gaslines.utility import Direction, Observable
 
 
-class Point:
+class Point(Observable):
     """
     Represents a single lattice point in a Gas Lines puzzle grid
     """
@@ -64,6 +64,7 @@ class Point:
         return self._child
 
     @child.setter
+    @Observable.observe
     def child(self, point):
         """Sets this point's child to the given point."""
         self._child = point

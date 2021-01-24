@@ -5,6 +5,8 @@ Lines puzzle.
 """
 
 
+import functools
+
 import gaslines.display as display
 from gaslines.logic import Strategy
 
@@ -32,6 +34,9 @@ def solve(grid, strategy=Strategy.full_recursive, reveal_delay=None):
     solve = getattr(strategy_container, strategy_name)
     # Optionally decorate the algorithm with reveal functionality
     if reveal_delay is not None:
-        solve = display.reveal(solve, reveal_delay)
-        setattr(strategy_container, strategy_name, solve)
+        # Reveal the grid once after each mutation
+        reveal = functools.partial(display.reveal, grid, reveal_delay)
+        grid.register(reveal)
+        # Also reveal the grid in its initial state, prior to solving it
+        reveal()
     return solve(grid)
