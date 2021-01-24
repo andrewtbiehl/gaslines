@@ -5,10 +5,10 @@ Lines puzzle.
 
 
 from gaslines.point import Point
-from gaslines.utility import Direction
+from gaslines.utility import Direction, Observable
 
 
-class Grid:
+class Grid(Observable):
     """
     Represents the grid of lattice points on which a Gas Lines puzzle takes place
     """
@@ -18,6 +18,7 @@ class Grid:
         self._create_grid(grid)
         self._set_height()
         self._set_length()
+        self._observe_points()
 
     def __getitem__(self, row_index):
         """
@@ -48,6 +49,16 @@ class Grid:
         Helper method for `__init__` that determines and stores the grid length.
         """
         self._length = len(self._grid[0])
+
+    def _observe_points(self):
+        """
+        Helper method for `__init__` that registers this grid as an observer of its
+        own points. This allows the grid to notify its own observers when any of its
+        points are mutated.
+        """
+        for row in self:
+            for point in row:
+                point.register(self.notify)
 
     @property
     def height(self):

@@ -23,6 +23,25 @@ GRID_STRING_2 = """\
 """
 
 
+class Incrementor:
+    """
+    A simple class that initializes an integer value at zero and then, whenever
+    directed, increments that value by one.
+    """
+
+    def __init__(self):
+        self._count = 0
+
+    def increment(self):
+        """Increments the count."""
+        self._count += 1
+
+    @property
+    def count(self):
+        """Returns the current count."""
+        return self._count
+
+
 @pytest.mark.parametrize(
     "input_grid", (((-1,), (-1,)), ((1, 0), (-1, -1)), ((-1,), (-1,), (-1,)))
 )
@@ -79,3 +98,21 @@ def test_str_with_complete_board_returns_correct_string():
     grid[1][1].child = grid[1][0]
     grid[1][0].child = grid[2][0]
     assert str(grid) == GRID_STRING_2
+
+
+def test_observability_with_point_mutations_notifies_observers():
+    """Verifies that grids forward point mutation notifications to their observers"""
+    grid = Grid(((-1, -1), (-1, -1)))
+    point = grid[0][0]
+    # Instantiate and register an incrementor as an example observer of the grid
+    incrementor = Incrementor()
+    grid.register(incrementor.increment)
+    # Mutate a point on the grid an arbitrary number of times
+    # Verify that the incrementor indeed increments in response to each point mutation
+    assert incrementor.count == 0
+    for i in range(1, 4):
+        # Solely accessing the point's child field should not notify observers
+        assert point.child is None
+        # Mutating the point's child field should indeed notify observers
+        point.child = None
+        assert incrementor.count == i
