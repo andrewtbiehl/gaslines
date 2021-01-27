@@ -1,79 +1,71 @@
 """
-Module that holds both the Strategy class, the container class for the various Gas
-Lines algorithms, and helper functions for said algorithms.
+Module that holds the algorithms for solving Gas Lines puzzles as well as helper
+functions for those algorithms.
+
+It is recommended to call the algorithms indirectly via the solve function.
 """
 
 
-class Strategy:
+def full_recursive(grid, current=None):
     """
-    Container class for algorithms that solve Gas Lines puzzles.
+    A depth-first, fully recursive approach to solving Gas Lines puzzles.
 
-    It is recommended to call these strategies indirectly via the solve function.
+    Mutates the grid object provided to search for a solution and returns True
+    once a solution has been found or False if no solution exists.
+
+    Retains a placeholder of its current position in order to be fully recursive.
+
+    Args:
+        grid (Grid): A partially solved Gas Lines grid.
+        current (Point): A point in the grid from which to begin recursion. Should
+            not be explicitly set with the initial call of the algorithm.
+
+    Returns:
+        bool: Whether the grid can be (or is) solved in its current state.
     """
-
-    @staticmethod
-    def full_recursive(grid, current=None):
-        """
-        A depth-first, fully recursive approach to solving Gas Lines puzzles.
-
-        Mutates the grid object provided to search for a solution and returns True
-        once a solution has been found or False if no solution exists.
-
-        Retains a placeholder of its current position in order to be fully recursive.
-
-        Args:
-            grid (Grid): A partially solved Gas Lines grid.
-            current (Point): A point in the grid from which to begin recursion. Should
-                not be explicitly set with the initial call of the algorithm.
-
-        Returns:
-            bool: Whether the grid can be (or is) solved in its current state.
-        """
-        if current is None or current.is_sink():
-            # Base case: a grid with no remaining heads is already in a solved state
-            if not has_head(grid):
-                return True
-            current = get_head(grid)
-        # Reset the child of "current" with the next candidate
-        next_ = get_next(current)
-        current.child = next_
-        if next_ is None:
-            return False
-        # Recursive case: continue search starting at the child of "current" and then,
-        # if no solution is found, search again starting at "current" with new child
-        return Strategy.full_recursive(grid, next_) or Strategy.full_recursive(
-            grid, current
-        )
-
-    @staticmethod
-    def partial_recursive(grid):
-        """
-        A depth-first, partially recursive approach to solving Gas Lines puzzles.
-
-        Mutates the grid object provided to search for a solution and returns True
-        once a solution has been found or False if no solution exists.
-
-        Recursive calls retain no memory of previous states, so the algorithm has to
-        explicitly iterate through all recursive searches from the current state.
-
-        Args:
-            grid (Grid): A partially solved Gas Lines grid.
-
-        Returns:
-            bool: Whether the grid can be (or is) solved in its current state.
-        """
+    if current is None or current.is_sink():
         # Base case: a grid with no remaining heads is already in a solved state
         if not has_head(grid):
             return True
         current = get_head(grid)
-        # Iterate through each possible next point from "current"
-        while (next_ := get_next(current)) is not None:
-            current.child = next_
-            # Recursive case: continue searching with a new child of "current"
-            if Strategy.partial_recursive(grid):
-                return True
-        current.child = None
+    # Reset the child of "current" with the next candidate
+    next_ = get_next(current)
+    current.child = next_
+    if next_ is None:
         return False
+    # Recursive case: continue search starting at the child of "current" and then,
+    # if no solution is found, search again starting at "current" with new child
+    return full_recursive(grid, next_) or full_recursive(grid, current)
+
+
+def partial_recursive(grid):
+    """
+    A depth-first, partially recursive approach to solving Gas Lines puzzles.
+
+    Mutates the grid object provided to search for a solution and returns True
+    once a solution has been found or False if no solution exists.
+
+    Recursive calls retain no memory of previous states, so the algorithm has to
+    explicitly iterate through all recursive searches from the current state.
+
+    Args:
+        grid (Grid): A partially solved Gas Lines grid.
+
+    Returns:
+        bool: Whether the grid can be (or is) solved in its current state.
+    """
+    # Base case: a grid with no remaining heads is already in a solved state
+    if not has_head(grid):
+        return True
+    current = get_head(grid)
+    # Iterate through each possible next point from "current"
+    while (next_ := get_next(current)) is not None:
+        current.child = next_
+        # Recursive case: continue searching with a new child of "current"
+        if partial_recursive(grid):
+            return True
+    current.child = None
+    return False
 
 
 def get_next(current):

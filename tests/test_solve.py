@@ -4,7 +4,7 @@
 import pytest
 
 from gaslines.grid import Grid
-from gaslines.logic import Strategy
+from gaslines.logic import full_recursive, partial_recursive
 from gaslines.solve import solve
 
 
@@ -26,9 +26,7 @@ REVEAL_SEARCH_STRING = """\
 """  # noqa: W293
 
 
-@pytest.mark.parametrize(
-    "strategy", (Strategy.full_recursive, Strategy.partial_recursive)
-)
+@pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
 def test_solve_with_trivial_example_solves_grid(strategy):
     """Verifies that `solve` is able to solve a trivial Gas Lines puzzle."""
     grid = Grid(((1, 0),))
@@ -36,9 +34,7 @@ def test_solve_with_trivial_example_solves_grid(strategy):
     assert grid[0][0].child.location == (0, 1)
 
 
-@pytest.mark.parametrize(
-    "strategy", (Strategy.full_recursive, Strategy.partial_recursive)
-)
+@pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
 def test_solve_with_simple_example_solves_grid(strategy):
     """Verifies that `solve` is able to solve a simple Gas Lines puzzle."""
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
@@ -55,9 +51,7 @@ def test_solve_with_simple_example_solves_grid(strategy):
     assert grid[2][2].child.location == (2, 1)
 
 
-@pytest.mark.parametrize(
-    "strategy", (Strategy.full_recursive, Strategy.partial_recursive)
-)
+@pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
 def test_solve_with_unsolvable_example_returns_false(strategy):
     """Verifies that `solve` returns false for an unsolvable puzzle."""
     grid = Grid(((2, -1, -1), (-1, -1, -1), (-1, -1, -1)))
@@ -68,9 +62,7 @@ def test_solve_with_unsolvable_example_returns_false(strategy):
             assert point.is_source() or point.is_open()
 
 
-@pytest.mark.parametrize(
-    "strategy", (Strategy.full_recursive, Strategy.partial_recursive)
-)
+@pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
 def test_solve_with_real_july_12_example_solves_grid(strategy):
     """Verifies that `solve` is able to solve the July 12 Gas Lines puzzle."""
     # Real NYT Magazine Gas Lines puzzle from the July 12, 2020 issue
@@ -138,9 +130,7 @@ def test_solve_with_real_july_12_example_solves_grid(strategy):
     assert grid[6][6].is_open()
 
 
-@pytest.mark.parametrize(
-    "strategy", (Strategy.full_recursive, Strategy.partial_recursive)
-)
+@pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
 def test_solve_with_real_august_9_example_solves_grid(strategy):
     """Verifies that `solve` is able to solve the August 9 Gas Lines puzzle."""
     # Real NYT Magazine Gas Lines puzzle from the August 9, 2020 issue
@@ -208,9 +198,7 @@ def test_solve_with_real_august_9_example_solves_grid(strategy):
     assert grid[6][6].child.location == (6, 5)
 
 
-@pytest.mark.parametrize(
-    "strategy", (Strategy.full_recursive, Strategy.partial_recursive)
-)
+@pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
 def test_solve_with_reveal_delay_activated_prints_accordingly(strategy, capsys):
     """Verifies that `solve` using the reveal_delay option prints accordingly."""
     grid = Grid(((2, -1), (0, 0)))
