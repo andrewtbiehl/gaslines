@@ -29,14 +29,11 @@ def solve(grid, strategy=Strategy.full_recursive, reveal_delay=None):
     Returns:
         bool: Whether the grid has a solution.
     """
-    strategy_name = strategy.__name__
-    strategy_container = Strategy()
-    solve = getattr(strategy_container, strategy_name)
-    # Optionally decorate the algorithm with reveal functionality
+    # Optionally reveal the grid while it is being solved
     if reveal_delay is not None:
         # Reveal the grid once after each mutation
         reveal = functools.partial(display.reveal, grid, reveal_delay)
         grid.register(reveal)
         # Also reveal the grid in its initial state, prior to solving it
         reveal()
-    return solve(grid)
+    return strategy(grid)
