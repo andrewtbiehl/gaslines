@@ -11,10 +11,8 @@ class Strategy:
     It is recommended to call these strategies indirectly via the solve function.
     """
 
-    # Note: These algorithms are implemented as instance methods in order to allow
-    # the solve function to temporarily decorate them with additional features
-
-    def full_recursive(self, grid, current=None):
+    @staticmethod
+    def full_recursive(grid, current=None):
         """
         A depth-first, fully recursive approach to solving Gas Lines puzzles.
 
@@ -43,9 +41,12 @@ class Strategy:
             return False
         # Recursive case: continue search starting at the child of "current" and then,
         # if no solution is found, search again starting at "current" with new child
-        return self.full_recursive(grid, next_) or self.full_recursive(grid, current)
+        return Strategy.full_recursive(grid, next_) or Strategy.full_recursive(
+            grid, current
+        )
 
-    def partial_recursive(self, grid):
+    @staticmethod
+    def partial_recursive(grid):
         """
         A depth-first, partially recursive approach to solving Gas Lines puzzles.
 
@@ -69,7 +70,7 @@ class Strategy:
         while (next_ := get_next(current)) is not None:
             current.child = next_
             # Recursive case: continue searching with a new child of "current"
-            if self.partial_recursive(grid):
+            if Strategy.partial_recursive(grid):
                 return True
         current.child = None
         return False
