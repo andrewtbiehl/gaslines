@@ -40,18 +40,18 @@ def mock_strategy(grid):
 
 
 @pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
-def test_solve_with_trivial_example_solves_grid(strategy):
-    """Verifies that `solve` is able to solve a trivial Gas Lines puzzle."""
+def test_algorithm_with_trivial_example_solves_grid(strategy):
+    """Verifies that each algorithm is able to solve a trivial Gas Lines puzzle."""
     grid = Grid(((1, 0),))
-    assert solve(grid, strategy)
+    assert strategy(grid)
     assert grid[0][0].child.location == (0, 1)
 
 
 @pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
-def test_solve_with_simple_example_solves_grid(strategy):
-    """Verifies that `solve` is able to solve a simple Gas Lines puzzle."""
+def test_algorithm_with_simple_example_solves_grid(strategy):
+    """Verifies that each algorithm is able to solve a simple Gas Lines puzzle."""
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
-    assert solve(grid, strategy)
+    assert strategy(grid)
     # Test all points in component-wise order
     assert grid[0][0].child.location == (0, 1)
     assert grid[0][1].child.location == (0, 2)
@@ -65,10 +65,10 @@ def test_solve_with_simple_example_solves_grid(strategy):
 
 
 @pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
-def test_solve_with_unsolvable_example_returns_false(strategy):
-    """Verifies that `solve` returns false for an unsolvable puzzle."""
+def test_algorithm_with_unsolvable_example_returns_false(strategy):
+    """Verifies that each algorithm returns false for an unsolvable puzzle."""
     grid = Grid(((2, -1, -1), (-1, -1, -1), (-1, -1, -1)))
-    assert not solve(grid, strategy)
+    assert not strategy(grid)
     # Test that grid is clear
     for row in grid:
         for point in row:
@@ -76,8 +76,8 @@ def test_solve_with_unsolvable_example_returns_false(strategy):
 
 
 @pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
-def test_solve_with_real_july_12_example_solves_grid(strategy):
-    """Verifies that `solve` is able to solve the July 12 Gas Lines puzzle."""
+def test_algorithm_with_real_july_12_example_solves_grid(strategy):
+    """Verifies that each algorithm is able to solve the July 12 Gas Lines puzzle."""
     # Real NYT Magazine Gas Lines puzzle from the July 12, 2020 issue
     grid = Grid(
         (
@@ -90,7 +90,7 @@ def test_solve_with_real_july_12_example_solves_grid(strategy):
             (5, -1, -1, 2, -1, -1, -1),
         )
     )
-    assert solve(grid, strategy)
+    assert strategy(grid)
     # Test all points in component-wise order
     assert grid[0][0].child.location == (1, 0)
     assert grid[0][1].child.location == (0, 2)
@@ -144,8 +144,8 @@ def test_solve_with_real_july_12_example_solves_grid(strategy):
 
 
 @pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
-def test_solve_with_real_august_9_example_solves_grid(strategy):
-    """Verifies that `solve` is able to solve the August 9 Gas Lines puzzle."""
+def test_algorithm_with_real_august_9_example_solves_grid(strategy):
+    """Verifies that each algorithm is able to solve the August 9 Gas Lines puzzle."""
     # Real NYT Magazine Gas Lines puzzle from the August 9, 2020 issue
     grid = Grid(
         (
@@ -158,7 +158,7 @@ def test_solve_with_real_august_9_example_solves_grid(strategy):
             (4, -1, -1, -1, -1, -1, -1),
         )
     )
-    assert solve(grid, strategy)
+    assert strategy(grid)
     # Test all points in component-wise order
     assert grid[0][0].child.location == (1, 0)
     assert grid[0][1].is_open()
