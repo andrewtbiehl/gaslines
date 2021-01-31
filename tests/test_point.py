@@ -97,8 +97,7 @@ def test_child_returns_no_child_when_child_reset():
 
 def test_get_neighbor_with_neighbor_present_returns_correct_point():
     """Verifies that the neighbor method functions for a point with neighbors."""
-    # The types have been carefully assigned for ease of testing
-    grid = Grid(((0, 1, 0), (4, 5, 2), (0, 3, 0)))
+    grid = Grid(((-1, -1, -1), (-1, -1, -1), (-1, -1, -1)))
     point = grid[1][1]
     neighbors = (grid[0][1], grid[1][2], grid[2][1], grid[1][0])
     # Test that the correct neighbor exists in each direction
@@ -110,8 +109,7 @@ def test_get_neighbor_with_neighbor_present_returns_correct_point():
 
 def test_get_neighbor_with_missing_neighbor_returns_none():
     """Verifies that the neighbor method functions for nonexistent neighbors."""
-    # The types have been carefully assigned for ease of testing
-    grid = Grid(((1, 2, 0), (0, 0, 3), (0, 0, 4)))
+    grid = Grid(((-1, -1, -1), (-1, -1, -1), (-1, -1, -1)))
     # Test the north west point
     point = grid[0][0]
     assert not (
@@ -136,7 +134,7 @@ def test_get_neighbor_with_missing_neighbor_returns_none():
 
 def test_get_neighbors_with_some_neighbors_returns_correct_points():
     """Verifies that the neighbor method functions for points with some neighbors."""
-    grid = Grid(((1, 2), (3, 0)))
+    grid = Grid(((-1, -1), (-1, -1)))
     point = grid[0][0]
     expected_neighbors = (grid[0][1], grid[1][0])
     actual_neighbors = point.get_neighbors()
