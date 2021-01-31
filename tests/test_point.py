@@ -97,41 +97,35 @@ def test_child_returns_no_child_when_child_reset():
 
 def test_get_neighbor_with_neighbor_present_returns_correct_point():
     """Verifies that the neighbor method functions for a point with neighbors."""
-    # The types have been carefully assigned for ease of testing
-    grid = Grid(((0, 1, 0), (4, 5, 2), (0, 3, 0)))
+    grid = Grid(((-1, -1, -1), (-1, -1, -1), (-1, -1, -1)))
     point = grid[1][1]
-    assert point._type == 5
+    neighbors = (grid[0][1], grid[1][2], grid[2][1], grid[1][0])
     # Test that the correct neighbor exists in each direction
     for i, direction in enumerate(Direction):
         assert point.has_neighbor(direction)
         neighbor = point.get_neighbor(direction)
-        assert neighbor._type == i + 1
+        assert neighbor is neighbors[i]
 
 
 def test_get_neighbor_with_missing_neighbor_returns_none():
     """Verifies that the neighbor method functions for nonexistent neighbors."""
-    # The types have been carefully assigned for ease of testing
-    grid = Grid(((1, 2, 0), (0, 0, 3), (0, 0, 4)))
+    grid = Grid(((-1, -1, -1), (-1, -1, -1), (-1, -1, -1)))
     # Test the north west point
     point = grid[0][0]
-    assert point._type == 1
     assert not (
         point.has_neighbor(Direction.NORTH) or point.has_neighbor(Direction.WEST)
     )
     assert point.get_neighbor(Direction.NORTH) is None
     # Test the north center point
     point = grid[0][1]
-    assert point._type == 2
     assert not point.has_neighbor(Direction.NORTH)
     assert point.get_neighbor(Direction.NORTH) is None
     # Test the center east point
     point = grid[1][2]
-    assert point._type == 3
     assert not point.has_neighbor(Direction.EAST)
     assert point.get_neighbor(Direction.EAST) is None
     # Test the south east point
     point = grid[2][2]
-    assert point._type == 4
     assert not (
         point.has_neighbor(Direction.EAST) or point.has_neighbor(Direction.EAST)
     )
@@ -140,12 +134,13 @@ def test_get_neighbor_with_missing_neighbor_returns_none():
 
 def test_get_neighbors_with_some_neighbors_returns_correct_points():
     """Verifies that the neighbor method functions for points with some neighbors."""
-    grid = Grid(((1, 2), (3, 0)))
+    grid = Grid(((-1, -1), (-1, -1)))
     point = grid[0][0]
-    assert point._type == 1
-    neighbors = point.get_neighbors()
-    assert len(neighbors) == 2
-    assert [point._type for point in neighbors] == [2, 3]
+    expected_neighbors = (grid[0][1], grid[1][0])
+    actual_neighbors = point.get_neighbors()
+    assert len(expected_neighbors) == len(actual_neighbors) == 2
+    for expected_neighbor, actual_neighbor in zip(expected_neighbors, actual_neighbors):
+        assert expected_neighbor is actual_neighbor
 
 
 def test_parent_with_parent_returns_correct_point():
@@ -240,8 +235,8 @@ def test_remaining_segments_with_source_returns_type():
     Verifies that the number of remaining segments of a source point is what was set.
     """
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
-    assert grid[0][0].remaining_segments == grid[0][0]._type == 3
-    assert grid[1][1].remaining_segments == grid[1][1]._type == 2
+    assert grid[0][0].remaining_segments == 3
+    assert grid[1][1].remaining_segments == 2
 
 
 def test_remaining_segments_with_open_point_returns_none():
