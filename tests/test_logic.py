@@ -1,5 +1,7 @@
 """All unit tests for the gaslines logic module."""
 
+import itertools
+
 import pytest
 
 from gaslines.grid import Grid
@@ -278,56 +280,23 @@ def test_algorithm_with_real_july_12_example_solves_grid(strategy):
         )
     )
     assert strategy(grid)
-    # Test all points in component-wise order
-    assert grid[0][0].child.location == (1, 0)
-    assert grid[0][1].child.location == (0, 2)
-    assert grid[0][2].child.location == (1, 2)
-    assert grid[0][3].child.location == (1, 3)
-    assert grid[0][4].child.location == (0, 5)
-    assert grid[0][5].child.location == (1, 5)
-    assert grid[0][6].child.location == (1, 6)
-    assert grid[1][0].child.location == (1, 1)
-    assert grid[1][1].child.location == (2, 1)
-    assert grid[1][2].child.location == (2, 2)
-    assert grid[1][3].child.location == (1, 4)
-    assert grid[1][4].child.location == (0, 4)
-    assert grid[1][5].child.location == (2, 5)
-    assert grid[1][6].child.location == (2, 6)
-    assert grid[2][0].is_open()
-    assert grid[2][1].is_open()
-    assert grid[2][2].child.location == (2, 1)
-    assert grid[2][3].child.location == (3, 3)
-    assert grid[2][4].is_open()
-    assert grid[2][5].child.location == (2, 4)
-    assert grid[2][6].child.location == (3, 6)
-    assert grid[3][0].child.location == (4, 0)
-    assert grid[3][1].child.location == (2, 1)
-    assert grid[3][2].child.location == (3, 1)
-    assert grid[3][3].child.location == (4, 3)
-    assert grid[3][4].child.location == (4, 4)
-    assert grid[3][5].child.location == (3, 4)
-    assert grid[3][6].child.location == (4, 6)
-    assert grid[4][0].child.location == (4, 1)
-    assert grid[4][1].child.location == (4, 2)
-    assert grid[4][2].child.location == (5, 2)
-    assert grid[4][3].child.location == (5, 3)
-    assert grid[4][4].child.location == (4, 5)
-    assert grid[4][5].is_open()
-    assert grid[4][6].child.location == (4, 5)
-    assert grid[5][0].child.location == (5, 1)
-    assert grid[5][1].child.location == (6, 1)
-    assert grid[5][2].is_open()
-    assert grid[5][3].child.location == (5, 2)
-    assert grid[5][4].is_open()
-    assert grid[5][5].child.location == (4, 5)
-    assert grid[5][6].is_open()
-    assert grid[6][0].child.location == (5, 0)
-    assert grid[6][1].child.location == (6, 2)
-    assert grid[6][2].child.location == (5, 2)
-    assert grid[6][3].child.location == (6, 4)
-    assert grid[6][4].child.location == (6, 5)
-    assert grid[6][5].child.location == (5, 5)
-    assert grid[6][6].is_open()
+    # Verify the following list of expected child locations one by one
+    expected_child_locations = (
+        ((1, 0), (0, 2), (1, 2), (1, 3), (0, 5), (1, 5), (1, 6)),
+        ((1, 1), (2, 1), (2, 2), (1, 4), (0, 4), (2, 5), (2, 6)),
+        (None, None, (2, 1), (3, 3), None, (2, 4), (3, 6)),
+        ((4, 0), (2, 1), (3, 1), (4, 3), (4, 4), (3, 4), (4, 6)),
+        ((4, 1), (4, 2), (5, 2), (5, 3), (4, 5), None, (4, 5)),
+        ((5, 1), (6, 1), None, (5, 2), None, (4, 5), None),
+        ((5, 0), (6, 2), (5, 2), (6, 4), (6, 5), (5, 5), None),
+    )
+    for i, j in itertools.product(range(7), range(7)):
+        point = grid[i][j]
+        expected_child_location = expected_child_locations[i][j]
+        if expected_child_location is None:
+            assert point.is_open()
+        else:
+            assert point.child.location == expected_child_location
 
 
 @pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
@@ -346,53 +315,20 @@ def test_algorithm_with_real_august_9_example_solves_grid(strategy):
         )
     )
     assert strategy(grid)
-    # Test all points in component-wise order
-    assert grid[0][0].child.location == (1, 0)
-    assert grid[0][1].is_open()
-    assert grid[0][2].is_open()
-    assert grid[0][3].child.location == (0, 2)
-    assert grid[0][4].child.location == (0, 5)
-    assert grid[0][5].child.location == (1, 5)
-    assert grid[0][6].is_open()
-    assert grid[1][0].child.location == (2, 0)
-    assert grid[1][1].child.location == (1, 2)
-    assert grid[1][2].child.location == (2, 2)
-    assert grid[1][3].child.location == (0, 3)
-    assert grid[1][4].is_open()
-    assert grid[1][5].child.location == (2, 5)
-    assert grid[1][6].child.location == (2, 6)
-    assert grid[2][0].child.location == (3, 0)
-    assert grid[2][1].child.location == (3, 1)
-    assert grid[2][2].child.location == (2, 1)
-    assert grid[2][3].child.location == (1, 3)
-    assert grid[2][4].child.location == (3, 4)
-    assert grid[2][5].child.location == (3, 5)
-    assert grid[2][6].child.location == (3, 6)
-    assert grid[3][0].child.location == (3, 1)
-    assert grid[3][1].is_open()
-    assert grid[3][2].child.location == (3, 1)
-    assert grid[3][3].child.location == (2, 3)
-    assert grid[3][4].child.location == (3, 5)
-    assert grid[3][5].is_open()
-    assert grid[3][6].child.location == (4, 6)
-    assert grid[4][0].child.location == (4, 1)
-    assert grid[4][1].child.location == (4, 2)
-    assert grid[4][2].child.location == (4, 3)
-    assert grid[4][3].child.location == (3, 3)
-    assert grid[4][4].child.location == (4, 5)
-    assert grid[4][5].child.location == (3, 5)
-    assert grid[4][6].child.location == (5, 6)
-    assert grid[5][0].child.location == (4, 0)
-    assert grid[5][1].child.location == (6, 1)
-    assert grid[5][2].is_open()
-    assert grid[5][3].child.location == (5, 2)
-    assert grid[5][4].child.location == (4, 4)
-    assert grid[5][5].child.location == (5, 4)
-    assert grid[5][6].child.location == (6, 6)
-    assert grid[6][0].child.location == (5, 0)
-    assert grid[6][1].child.location == (6, 2)
-    assert grid[6][2].child.location == (5, 2)
-    assert grid[6][3].child.location == (5, 3)
-    assert grid[6][4].child.location == (6, 3)
-    assert grid[6][5].child.location == (6, 4)
-    assert grid[6][6].child.location == (6, 5)
+    # Verify the following list of expected child locations one by one
+    expected_child_locations = (
+        ((1, 0), None, None, (0, 2), (0, 5), (1, 5), None),
+        ((2, 0), (1, 2), (2, 2), (0, 3), None, (2, 5), (2, 6)),
+        ((3, 0), (3, 1), (2, 1), (1, 3), (3, 4), (3, 5), (3, 6)),
+        ((3, 1), None, (3, 1), (2, 3), (3, 5), None, (4, 6)),
+        ((4, 1), (4, 2), (4, 3), (3, 3), (4, 5), (3, 5), (5, 6)),
+        ((4, 0), (6, 1), None, (5, 2), (4, 4), (5, 4), (6, 6)),
+        ((5, 0), (6, 2), (5, 2), (5, 3), (6, 3), (6, 4), (6, 5)),
+    )
+    for i, j in itertools.product(range(7), range(7)):
+        point = grid[i][j]
+        expected_child_location = expected_child_locations[i][j]
+        if expected_child_location is None:
+            assert point.is_open()
+        else:
+            assert point.child.location == expected_child_location
