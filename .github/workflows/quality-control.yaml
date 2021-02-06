@@ -93,6 +93,6 @@ jobs:
       # The following step is the central step to this job
       - name: Run tests
         env:
-            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-            COVERALLS_SERVICE_NAME: github
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          COVERALLS_SERVICE_NAME: github
         run: invoke test --coverage=upload
