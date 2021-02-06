@@ -54,7 +54,7 @@ def test_solve_with_reveal_delay_activated_prints_accordingly(capsys):
 
 
 def test_solve_with_default_arguments_solves_grid_silently(capsys):
-    """"Verifies that `solve` using default arguments solves a real grid silently."""
+    """Verifies that `solve` using default arguments solves a real grid silently."""
     grid = Grid(((2, -1), (0, 0)))
     assert solve(grid)
     # Test all points in component-wise order
@@ -68,7 +68,7 @@ def test_solve_with_default_arguments_solves_grid_silently(capsys):
 
 @pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
 def test_solve_with_real_strategies_solves_grid(strategy):
-    """"Verifies that `solve` using real strategies solves a real grid."""
+    """Verifies that `solve` using real strategies solves a real grid."""
     grid = Grid(((2, -1), (0, 0)))
     assert solve(grid, strategy=strategy)
     # Test all points in component-wise order

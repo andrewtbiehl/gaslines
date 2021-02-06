@@ -127,7 +127,7 @@ def test_get_neighbor_with_missing_neighbor_returns_none():
     # Test the south east point
     point = grid[2][2]
     assert not (
-        point.has_neighbor(Direction.EAST) or point.has_neighbor(Direction.EAST)
+        point.has_neighbor(Direction.EAST) or point.has_neighbor(Direction.SOUTH)
     )
     assert point.get_neighbor(Direction.EAST) is None
 
@@ -212,7 +212,7 @@ def test_is_on_different_segment_with_source_returns_false():
     assert not grid[1][0].is_on_different_segment(source)
 
 
-def test_is_on_different_segment_with_same_segment_returns_true():
+def test_is_on_different_segment_with_different_segment_returns_true():
     """
     Verifies that `is_on_different_segment` is true for a point on a new segment.
     """
@@ -221,7 +221,7 @@ def test_is_on_different_segment_with_same_segment_returns_true():
     assert grid[1][1].is_on_different_segment(grid[0][1])
 
 
-def test_is_on_different_segment_with_different_segment_returns_false():
+def test_is_on_different_segment_with_same_segment_returns_false():
     """
     Verifies that `is_on_different_segment` is false for a point on the same segment.
     """
