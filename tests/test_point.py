@@ -212,7 +212,7 @@ def test_is_on_different_segment_with_source_returns_false():
     assert not grid[1][0].is_on_different_segment(source)
 
 
-def test_is_on_different_segment_with_same_segment_returns_true():
+def test_is_on_different_segment_with_different_segment_returns_true():
     """
     Verifies that `is_on_different_segment` is true for a point on a new segment.
     """
@@ -221,7 +221,7 @@ def test_is_on_different_segment_with_same_segment_returns_true():
     assert grid[1][1].is_on_different_segment(grid[0][1])
 
 
-def test_is_on_different_segment_with_different_segment_returns_false():
+def test_is_on_different_segment_with_same_segment_returns_false():
     """
     Verifies that `is_on_different_segment` is false for a point on the same segment.
     """
