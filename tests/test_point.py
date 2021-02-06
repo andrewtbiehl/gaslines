@@ -127,7 +127,7 @@ def test_get_neighbor_with_missing_neighbor_returns_none():
     # Test the south east point
     point = grid[2][2]
     assert not (
-        point.has_neighbor(Direction.EAST) or point.has_neighbor(Direction.EAST)
+        point.has_neighbor(Direction.EAST) or point.has_neighbor(Direction.SOUTH)
     )
     assert point.get_neighbor(Direction.EAST) is None
 
