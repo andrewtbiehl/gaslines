@@ -54,13 +54,7 @@ def test_dimensions_return_dimensions_when_asked(input_grid):
 
 def test_subscripting_returns_correct_points():
     """Verifies that the subscript operator works as expected."""
-    grid = Grid(
-        (
-            (-1, -1, -1),
-            (0, 0, 0),
-            (1, 2, 3),
-        )
-    )
+    grid = Grid(((-1, -1, -1), (0, 0, 0), (1, 2, 3)))
     # Test that each row contains three points
     for i in range(3):
         assert len(grid[i]) == 3
