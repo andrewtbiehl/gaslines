@@ -252,16 +252,19 @@ def test_algorithm_with_simple_example_solves_grid(strategy):
     """Verifies that each algorithm is able to solve a simple Gas Lines puzzle."""
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
     assert strategy(grid)
-    # Test all points in component-wise order
-    assert grid[0][0].child.location == (0, 1)
-    assert grid[0][1].child.location == (0, 2)
-    assert grid[0][2].child.location == (1, 2)
-    assert grid[1][0].child.location == (2, 0)
-    assert grid[1][1].child.location == (1, 0)
-    assert grid[1][2].child.location == (2, 2)
-    assert grid[2][0].is_open()
-    assert grid[2][1].child.location == (2, 0)
-    assert grid[2][2].child.location == (2, 1)
+    # Verify the following list of expected child locations one by one
+    expected_child_locations = (
+        ((0, 1), (0, 2), (1, 2)),
+        ((2, 0), (1, 0), (2, 2)),
+        (None, (2, 0), (2, 1)),
+    )
+    for i, j in itertools.product(range(3), range(3)):
+        point = grid[i][j]
+        expected_child_location = expected_child_locations[i][j]
+        if expected_child_location is None:
+            assert point.is_open()
+        else:
+            assert point.child.location == expected_child_location
 
 
 @pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
