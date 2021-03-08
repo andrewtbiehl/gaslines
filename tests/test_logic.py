@@ -329,44 +329,24 @@ def test_algorithm_with_unsolvable_example_returns_false(strategy):
 
 
 @pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
-def test_algorithm_with_simple_example_solves_grid(strategy):
-    """Verifies that each algorithm is able to solve a simple Gas Lines puzzle."""
-    grid = small_solvable_grid()
+@pytest.mark.parametrize(
+    "grid,expected_child_locations",
+    (
+        (small_solvable_grid, small_solvable_grid_solution_child_locations),
+        (july_12_grid, july_12_grid_solution_child_locations),
+        (august_9_grid, august_9_grid_solution_child_locations),
+    ),
+)
+def test_algorithm_with_solvable_example_solves_grid(
+    strategy, grid, expected_child_locations
+):
+    """Verifies that each algorithm is able to solve each provided puzzle."""
+    # Call the `grid` and `expected_child_locations` creators during each test
+    # Do this to avoid any chance of accidentally reusing a mutable object
+    grid = grid()
     assert strategy(grid)
     # Verify the following list of expected child locations one by one
-    expected_child_locations = small_solvable_grid_solution_child_locations()
-    for i, j in itertools.product(range(grid.height), range(grid.length)):
-        point = grid[i][j]
-        expected_child_location = expected_child_locations[i][j]
-        if expected_child_location is None:
-            assert point.is_open()
-        else:
-            assert point.child.location == expected_child_location
-
-
-@pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
-def test_algorithm_with_real_july_12_example_solves_grid(strategy):
-    """Verifies that each algorithm is able to solve the July 12 Gas Lines puzzle."""
-    grid = july_12_grid()
-    assert strategy(grid)
-    # Verify the following list of expected child locations one by one
-    expected_child_locations = july_12_grid_solution_child_locations()
-    for i, j in itertools.product(range(grid.height), range(grid.length)):
-        point = grid[i][j]
-        expected_child_location = expected_child_locations[i][j]
-        if expected_child_location is None:
-            assert point.is_open()
-        else:
-            assert point.child.location == expected_child_location
-
-
-@pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
-def test_algorithm_with_real_august_9_example_solves_grid(strategy):
-    """Verifies that each algorithm is able to solve the August 9 Gas Lines puzzle."""
-    grid = august_9_grid()
-    assert strategy(grid)
-    # Verify the following list of expected child locations one by one
-    expected_child_locations = august_9_grid_solution_child_locations()
+    expected_child_locations = expected_child_locations()
     for i, j in itertools.product(range(grid.height), range(grid.length)):
         point = grid[i][j]
         expected_child_location = expected_child_locations[i][j]
