@@ -15,6 +15,87 @@ from gaslines.logic import (
 )
 
 
+def small_solvable_grid():
+    """Test fixture that creates a small and simple solvable Gas Lines puzzle."""
+    return Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+
+
+def small_solvable_grid_solution_child_locations():
+    """
+    Test fixture that returns the solution to the `small_solvable_grid` in the form
+    of a matrix of locations of children.
+    """
+    return (
+        ((0, 1), (0, 2), (1, 2)),
+        ((2, 0), (1, 0), (2, 2)),
+        (None, (2, 0), (2, 1)),
+    )
+
+
+def july_12_grid():
+    """Test fixture that creates the July 12 Gas Lines puzzle."""
+    # Real NYT Magazine Gas Lines puzzle from the July 12, 2020 issue
+    return Grid(
+        (
+            (3, 3, -1, 6, -1, -1, 2),
+            (-1, -1, -1, -1, -1, -1, -1),
+            (-1, 0, -1, 2, 0, -1, -1),
+            (3, -1, 2, -1, -1, 3, -1),
+            (-1, -1, -1, -1, -1, 0, -1),
+            (-1, -1, 0, -1, -1, -1, -1),
+            (5, -1, -1, 2, -1, -1, -1),
+        )
+    )
+
+
+def july_12_grid_solution_child_locations():
+    """
+    Test fixture that returns the solution to the `july_12_grid` in the form of a
+    matrix of locations of children.
+    """
+    return (
+        ((1, 0), (0, 2), (1, 2), (1, 3), (0, 5), (1, 5), (1, 6)),
+        ((1, 1), (2, 1), (2, 2), (1, 4), (0, 4), (2, 5), (2, 6)),
+        (None, None, (2, 1), (3, 3), None, (2, 4), (3, 6)),
+        ((4, 0), (2, 1), (3, 1), (4, 3), (4, 4), (3, 4), (4, 6)),
+        ((4, 1), (4, 2), (5, 2), (5, 3), (4, 5), None, (4, 5)),
+        ((5, 1), (6, 1), None, (5, 2), None, (4, 5), None),
+        ((5, 0), (6, 2), (5, 2), (6, 4), (6, 5), (5, 5), None),
+    )
+
+
+def august_9_grid():
+    """Test fixture that creates the August 9 Gas Lines puzzle."""
+    # Real NYT Magazine Gas Lines puzzle from the August 9, 2020 issue
+    return Grid(
+        (
+            (2, -1, 0, -1, 2, -1, -1),
+            (-1, 4, -1, -1, -1, -1, 4),
+            (-1, -1, -1, -1, 2, -1, -1),
+            (-1, 0, 1, -1, -1, 0, -1),
+            (-1, -1, -1, -1, -1, -1, -1),
+            (-1, 3, 0, -1, -1, 4, -1),
+            (4, -1, -1, -1, -1, -1, -1),
+        )
+    )
+
+
+def august_9_grid_solution_child_locations():
+    """
+    Test fixture that returns the solution to the `august_9_grid` in the form of a
+    matrix of locations of children.
+    """
+    return (
+        ((1, 0), None, None, (0, 2), (0, 5), (1, 5), None),
+        ((2, 0), (1, 2), (2, 2), (0, 3), None, (2, 5), (2, 6)),
+        ((3, 0), (3, 1), (2, 1), (1, 3), (3, 4), (3, 5), (3, 6)),
+        ((3, 1), None, (3, 1), (2, 3), (3, 5), None, (4, 6)),
+        ((4, 1), (4, 2), (4, 3), (3, 3), (4, 5), (3, 5), (5, 6)),
+        ((4, 0), (6, 1), None, (5, 2), (4, 4), (5, 4), (6, 6)),
+        ((5, 0), (6, 2), (5, 2), (5, 3), (6, 3), (6, 4), (6, 5)),
+    )
+
+
 def test_get_head_with_new_puzzle_returns_head():
     """Verifies that `get_head` on a completely unsolved puzzle returns a head."""
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
@@ -250,14 +331,10 @@ def test_algorithm_with_unsolvable_example_returns_false(strategy):
 @pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
 def test_algorithm_with_simple_example_solves_grid(strategy):
     """Verifies that each algorithm is able to solve a simple Gas Lines puzzle."""
-    grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
+    grid = small_solvable_grid()
     assert strategy(grid)
     # Verify the following list of expected child locations one by one
-    expected_child_locations = (
-        ((0, 1), (0, 2), (1, 2)),
-        ((2, 0), (1, 0), (2, 2)),
-        (None, (2, 0), (2, 1)),
-    )
+    expected_child_locations = small_solvable_grid_solution_child_locations()
     for i, j in itertools.product(range(grid.height), range(grid.length)):
         point = grid[i][j]
         expected_child_location = expected_child_locations[i][j]
@@ -270,29 +347,10 @@ def test_algorithm_with_simple_example_solves_grid(strategy):
 @pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
 def test_algorithm_with_real_july_12_example_solves_grid(strategy):
     """Verifies that each algorithm is able to solve the July 12 Gas Lines puzzle."""
-    # Real NYT Magazine Gas Lines puzzle from the July 12, 2020 issue
-    grid = Grid(
-        (
-            (3, 3, -1, 6, -1, -1, 2),
-            (-1, -1, -1, -1, -1, -1, -1),
-            (-1, 0, -1, 2, 0, -1, -1),
-            (3, -1, 2, -1, -1, 3, -1),
-            (-1, -1, -1, -1, -1, 0, -1),
-            (-1, -1, 0, -1, -1, -1, -1),
-            (5, -1, -1, 2, -1, -1, -1),
-        )
-    )
+    grid = july_12_grid()
     assert strategy(grid)
     # Verify the following list of expected child locations one by one
-    expected_child_locations = (
-        ((1, 0), (0, 2), (1, 2), (1, 3), (0, 5), (1, 5), (1, 6)),
-        ((1, 1), (2, 1), (2, 2), (1, 4), (0, 4), (2, 5), (2, 6)),
-        (None, None, (2, 1), (3, 3), None, (2, 4), (3, 6)),
-        ((4, 0), (2, 1), (3, 1), (4, 3), (4, 4), (3, 4), (4, 6)),
-        ((4, 1), (4, 2), (5, 2), (5, 3), (4, 5), None, (4, 5)),
-        ((5, 1), (6, 1), None, (5, 2), None, (4, 5), None),
-        ((5, 0), (6, 2), (5, 2), (6, 4), (6, 5), (5, 5), None),
-    )
+    expected_child_locations = july_12_grid_solution_child_locations()
     for i, j in itertools.product(range(grid.height), range(grid.length)):
         point = grid[i][j]
         expected_child_location = expected_child_locations[i][j]
@@ -305,29 +363,10 @@ def test_algorithm_with_real_july_12_example_solves_grid(strategy):
 @pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
 def test_algorithm_with_real_august_9_example_solves_grid(strategy):
     """Verifies that each algorithm is able to solve the August 9 Gas Lines puzzle."""
-    # Real NYT Magazine Gas Lines puzzle from the August 9, 2020 issue
-    grid = Grid(
-        (
-            (2, -1, 0, -1, 2, -1, -1),
-            (-1, 4, -1, -1, -1, -1, 4),
-            (-1, -1, -1, -1, 2, -1, -1),
-            (-1, 0, 1, -1, -1, 0, -1),
-            (-1, -1, -1, -1, -1, -1, -1),
-            (-1, 3, 0, -1, -1, 4, -1),
-            (4, -1, -1, -1, -1, -1, -1),
-        )
-    )
+    grid = august_9_grid()
     assert strategy(grid)
     # Verify the following list of expected child locations one by one
-    expected_child_locations = (
-        ((1, 0), None, None, (0, 2), (0, 5), (1, 5), None),
-        ((2, 0), (1, 2), (2, 2), (0, 3), None, (2, 5), (2, 6)),
-        ((3, 0), (3, 1), (2, 1), (1, 3), (3, 4), (3, 5), (3, 6)),
-        ((3, 1), None, (3, 1), (2, 3), (3, 5), None, (4, 6)),
-        ((4, 1), (4, 2), (4, 3), (3, 3), (4, 5), (3, 5), (5, 6)),
-        ((4, 0), (6, 1), None, (5, 2), (4, 4), (5, 4), (6, 6)),
-        ((5, 0), (6, 2), (5, 2), (5, 3), (6, 3), (6, 4), (6, 5)),
-    )
+    expected_child_locations = august_9_grid_solution_child_locations()
     for i, j in itertools.product(range(grid.height), range(grid.length)):
         point = grid[i][j]
         expected_child_location = expected_child_locations[i][j]
