@@ -258,7 +258,7 @@ def test_algorithm_with_simple_example_solves_grid(strategy):
         ((2, 0), (1, 0), (2, 2)),
         (None, (2, 0), (2, 1)),
     )
-    for i, j in itertools.product(range(3), range(3)):
+    for i, j in itertools.product(range(grid.height), range(grid.length)):
         point = grid[i][j]
         expected_child_location = expected_child_locations[i][j]
         if expected_child_location is None:
@@ -293,7 +293,7 @@ def test_algorithm_with_real_july_12_example_solves_grid(strategy):
         ((5, 1), (6, 1), None, (5, 2), None, (4, 5), None),
         ((5, 0), (6, 2), (5, 2), (6, 4), (6, 5), (5, 5), None),
     )
-    for i, j in itertools.product(range(7), range(7)):
+    for i, j in itertools.product(range(grid.height), range(grid.length)):
         point = grid[i][j]
         expected_child_location = expected_child_locations[i][j]
         if expected_child_location is None:
@@ -328,7 +328,7 @@ def test_algorithm_with_real_august_9_example_solves_grid(strategy):
         ((4, 0), (6, 1), None, (5, 2), (4, 4), (5, 4), (6, 6)),
         ((5, 0), (6, 2), (5, 2), (5, 3), (6, 3), (6, 4), (6, 5)),
     )
-    for i, j in itertools.product(range(7), range(7)):
+    for i, j in itertools.product(range(grid.height), range(grid.length)):
         point = grid[i][j]
         expected_child_location = expected_child_locations[i][j]
         if expected_child_location is None:
