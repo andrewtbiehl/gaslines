@@ -237,6 +237,17 @@ def test_algorithm_with_trivial_example_solves_grid(strategy):
 
 
 @pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
+def test_algorithm_with_unsolvable_example_returns_false(strategy):
+    """Verifies that each algorithm returns false for an unsolvable puzzle."""
+    grid = Grid(((2, -1, -1), (-1, -1, -1), (-1, -1, -1)))
+    assert not strategy(grid)
+    # Test that grid is clear
+    for row in grid:
+        for point in row:
+            assert point.is_source() or point.is_open()
+
+
+@pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
 def test_algorithm_with_simple_example_solves_grid(strategy):
     """Verifies that each algorithm is able to solve a simple Gas Lines puzzle."""
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
@@ -251,17 +262,6 @@ def test_algorithm_with_simple_example_solves_grid(strategy):
     assert grid[2][0].is_open()
     assert grid[2][1].child.location == (2, 0)
     assert grid[2][2].child.location == (2, 1)
-
-
-@pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
-def test_algorithm_with_unsolvable_example_returns_false(strategy):
-    """Verifies that each algorithm returns false for an unsolvable puzzle."""
-    grid = Grid(((2, -1, -1), (-1, -1, -1), (-1, -1, -1)))
-    assert not strategy(grid)
-    # Test that grid is clear
-    for row in grid:
-        for point in row:
-            assert point.is_source() or point.is_open()
 
 
 @pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
