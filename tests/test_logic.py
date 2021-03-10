@@ -328,6 +328,43 @@ def test_algorithm_with_unsolvable_example_returns_false(strategy):
             assert point.is_source() or point.is_open()
 
 
+def zip_points_and_children(grid, child_locations):
+    """
+    Test helper function that transforms and then zips together the provided
+    iterables.
+
+    Args:
+        grid (Grid): A Gas Lines grid.
+        child_locations (tuple): A matrix with the exact same dimensions as the grid,
+            describing the solution to the grid in terms of the child of each point.
+            Each element of the matrix gives the coordinates of the child of the
+            corresponding point in the grid at that location in the solution or, in
+            the case of `None`, represents that that point has no child.
+
+    Returns:
+        zip: An iterable of ordered pairs, each comprising of a point in the given
+            grid and its corresponding child in the solution (if it has one, otherwise
+            `None`) for the first and second entry, respectively.
+    """
+    # Define a closure to easily get a point in the given grid based on its location
+    def get_nullable_point(location):
+        # None represents that the point does not exist
+        if location is None:
+            return None
+        # Otherwise the location is just a pair of coordinates
+        i, j = location
+        return grid[i][j]
+
+    # Flatten both provided collections at the same time for brevity
+    points, child_locations = map(
+        itertools.chain.from_iterable, (grid, child_locations)
+    )
+    # Use the previously defined closure to construct a list of child points
+    children = map(get_nullable_point, child_locations)
+    # Zip each point together with its corresponding child point
+    return zip(points, children)
+
+
 @pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
 @pytest.mark.parametrize(
     "grid,expected_child_locations",
@@ -346,25 +383,9 @@ def test_algorithm_with_solvable_example_solves_grid(
     grid = grid()
     expected_child_locations = expected_child_locations()
     assert strategy(grid)
-
-    # Define a closure to easily get a point in the given grid based on its location
-    def get_nullable_point(location):
-        # None represents that the point does not exist
-        if location is None:
-            return None
-        # Otherwise the location is just a pair of coordinates
-        i, j = location
-        return grid[i][j]
-
-    # Flatten both provided collections at the same time for brevity
-    points, expected_child_locations = map(
-        itertools.chain.from_iterable, (grid, expected_child_locations)
-    )
-    # Use the previously defined closure to construct a list of child points
-    expected_children = map(get_nullable_point, expected_child_locations)
-    # Zip each point together with its corresponding child point
-    zipped_points_and_expected_children = zip(points, expected_children)
     # Verify each actual child against the expected child one by one
     # Note that the child of a sink point should be `None`
-    for point, expected_child in zipped_points_and_expected_children:
+    for point, expected_child in zip_points_and_children(
+        grid, expected_child_locations
+    ):
         assert point.child is expected_child
