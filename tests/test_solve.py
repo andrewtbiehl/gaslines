@@ -6,6 +6,7 @@ import pytest
 from gaslines.grid import Grid
 from gaslines.logic import full_recursive, partial_recursive
 from gaslines.solve import solve
+from tests.utility import draw_path
 
 
 REVEAL_SEARCH_STRING = """\
@@ -34,8 +35,7 @@ def mock_strategy(grid):
 
     *   *
     """
-    grid[0][0].child = grid[0][1]
-    grid[0][1].child = grid[1][1]
+    draw_path(grid, ((0, 0), (0, 1), (1, 1)))
     return True
 
 

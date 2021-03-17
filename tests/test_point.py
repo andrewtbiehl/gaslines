@@ -6,6 +6,7 @@ import pytest
 from gaslines.grid import Grid
 from gaslines.point import Point
 from gaslines.utility import Direction
+from tests.utility import draw_path
 
 
 @pytest.mark.parametrize("grid", (None, [[0, 1], [None, None]], ((0, 1), (None, None))))
@@ -272,9 +273,7 @@ def test_remaining_segments_with_new_segment_returns_change():
     """
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
     # Test first point on second segment
-    grid[0][0].child = grid[0][1]
-    grid[0][1].child = grid[0][2]
-    grid[0][2].child = grid[1][2]
+    draw_path(grid, ((0, 0), (0, 1), (0, 2), (1, 2)))
     assert grid[1][2].remaining_segments == 2
     # Test second point on second segment has no change
     grid[1][2].child = grid[2][2]
@@ -295,15 +294,9 @@ def test_has_relationship_with_relationship_returns_true():
     """Verifies that `has_relationship` returns true for related points."""
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
     # Set path from "3"
-    grid[0][0].child = grid[0][1]
-    grid[0][1].child = grid[0][2]
-    grid[0][2].child = grid[1][2]
-    grid[1][2].child = grid[2][2]
-    grid[2][2].child = grid[2][1]
-    grid[2][1].child = grid[2][0]
+    draw_path(grid, ((0, 0), (0, 1), (0, 2), (1, 2), (2, 2), (2, 1), (2, 0)))
     # Set path from "2"
-    grid[1][1].child = grid[1][0]
-    grid[1][0].child = grid[2][0]
+    draw_path(grid, ((1, 1), (1, 0), (2, 0)))
     # Test north center pipe point
     assert grid[0][0].has_relationship(Direction.EAST)
     assert grid[0][1].has_relationship(Direction.WEST)
@@ -375,17 +368,11 @@ def test_is_head_with_sink_returns_false():
     # Test sink with no parents
     assert not grid[2][0].is_head()
     # Set path from "3"
-    grid[0][0].child = grid[0][1]
-    grid[0][1].child = grid[0][2]
-    grid[0][2].child = grid[1][2]
-    grid[1][2].child = grid[2][2]
-    grid[2][2].child = grid[2][1]
-    grid[2][1].child = grid[2][0]
+    draw_path(grid, ((0, 0), (0, 1), (0, 2), (1, 2), (2, 2), (2, 1), (2, 0)))
     # Test sink with one parent
     assert not grid[2][0].is_head()
     # Set path from "2"
-    grid[1][1].child = grid[1][0]
-    grid[1][0].child = grid[2][0]
+    draw_path(grid, ((1, 1), (1, 0), (2, 0)))
     # Test sink with all parents
     assert not grid[2][0].is_head()
 
@@ -394,14 +381,8 @@ def test_is_head_complete_puzzle_returns_no_heads():
     """Verifies that a completely solved puzzle has no remaining heads."""
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
     # Set path from "3"
-    grid[0][0].child = grid[0][1]
-    grid[0][1].child = grid[0][2]
-    grid[0][2].child = grid[1][2]
-    grid[1][2].child = grid[2][2]
-    grid[2][2].child = grid[2][1]
-    grid[2][1].child = grid[2][0]
+    draw_path(grid, ((0, 0), (0, 1), (0, 2), (1, 2), (2, 2), (2, 1), (2, 0)))
     # Set path from "2"
-    grid[1][1].child = grid[1][0]
-    grid[1][0].child = grid[2][0]
+    draw_path(grid, ((1, 1), (1, 0), (2, 0)))
     # Test that there are no heads anymore
     assert not [point for row in grid for point in row if point.is_head()]

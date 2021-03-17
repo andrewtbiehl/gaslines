@@ -13,6 +13,7 @@ from gaslines.logic import (
     is_option,
     partial_recursive,
 )
+from tests.utility import draw_path
 
 
 def small_solvable_grid():
@@ -107,8 +108,7 @@ def test_get_head_with_incomplete_puzzle_returns_head():
     """Verifies that `get_head` on a partially solved puzzle returns a head."""
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
     # Set partial path from "3"
-    grid[0][0].child = grid[0][1]
-    grid[0][1].child = grid[0][2]
+    draw_path(grid, ((0, 0), (0, 1), (0, 2)))
     # Test get_head returns head on path from "3"
     assert has_head(grid)
     assert get_head(grid).location == (0, 2)
@@ -122,15 +122,9 @@ def test_get_head_with_complete_puzzle_returns_none():
     """Verifies that a completely solved puzzle reports having no heads."""
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
     # Set path from "3"
-    grid[0][0].child = grid[0][1]
-    grid[0][1].child = grid[0][2]
-    grid[0][2].child = grid[1][2]
-    grid[1][2].child = grid[2][2]
-    grid[2][2].child = grid[2][1]
-    grid[2][1].child = grid[2][0]
+    draw_path(grid, ((0, 0), (0, 1), (0, 2), (1, 2), (2, 2), (2, 1), (2, 0)))
     # Set path from "2"
-    grid[1][1].child = grid[1][0]
-    grid[1][0].child = grid[2][0]
+    draw_path(grid, ((1, 1), (1, 0), (2, 0)))
     assert not has_head(grid)
     assert get_head(grid) is None
 
@@ -151,9 +145,7 @@ def test_is_option_with_unavailable_neighbor_returns_false():
     """
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
     # Set partial path from "3"
-    grid[0][0].child = grid[0][1]
-    grid[0][1].child = grid[0][2]
-    grid[0][2].child = grid[1][2]
+    draw_path(grid, ((0, 0), (0, 1), (0, 2), (1, 2)))
     # Test neighbors on partial path from "3"
     current = grid[1][1]
     assert not is_option(current, grid[0][1])
@@ -243,9 +235,7 @@ def test_get_next_with_no_child_and_some_open_neighbors_returns_first_available(
     """
     grid = Grid(((3, -1, -1), (-1, 2, -1), (0, -1, -1)))
     # Set partial path from "3"
-    grid[0][0].child = grid[0][1]
-    grid[0][1].child = grid[0][2]
-    grid[0][2].child = grid[1][2]
+    draw_path(grid, ((0, 0), (0, 1), (0, 2), (1, 2)))
     assert get_next(grid[1][1]).location == (2, 1)
 
 
@@ -253,10 +243,7 @@ def test_get_next_with_no_child_and_no_open_neighbors_returns_none():
     """Verifies that `get_next` returns None if no neighbors are open."""
     grid = Grid(((4, -1, 1), (0, -1, -1), (-1, -1, 0)))
     # Set (incorrect) path from "4"
-    grid[0][0].child = grid[0][1]
-    grid[0][1].child = grid[1][1]
-    grid[1][1].child = grid[1][2]
-    grid[1][2].child = grid[2][2]
+    draw_path(grid, ((0, 0), (0, 1), (1, 1), (1, 2), (2, 2)))
     assert get_next(grid[1][2]) is None
 
 
