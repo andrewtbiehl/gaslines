@@ -23,3 +23,16 @@ def pairwise(iterable):
     first, second = itertools.tee(iterable)
     next(second, None)
     yield from zip(first, second)
+
+
+def draw_path(grid, path):
+    """
+    Test helper function that "draws" the provided path on the provided grid.
+
+    Args:
+        grid (Grid): A Gas Lines grid.
+        path (Iterable): A list of coordinates of points in the grid.
+    """
+    points = (grid[i][j] for i, j in path)
+    for current_point, next_point in pairwise(points):
+        current_point.child = next_point
