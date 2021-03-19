@@ -55,6 +55,12 @@ CHECKS = OrderedDict(
                 command="isort . --check-only", message=ISORT_SUCCESS_MESSAGE
             ),
         ),
+        (
+            "pylint",
+            REPLACE_EMPTY_STDOUT_SCRIPT.format(
+                command="pylint tasks.py gaslines tests", message=LINTER_SUCCESS_MESSAGE
+            ),
+        ),
     )
 )
 
