@@ -20,6 +20,7 @@ echo "$output" && exit $code
 
 
 ISORT_SUCCESS_MESSAGE = "No import order issues found!"
+LINTER_SUCCESS_MESSAGE = "No code quality issues found!"
 
 
 # A list of formatter tools to run
@@ -45,7 +46,7 @@ CHECKS = OrderedDict(
         (
             "flake8",
             REPLACE_EMPTY_STDOUT_SCRIPT.format(
-                command="flake8 .", message="No code quality issues found!"
+                command="flake8 .", message=LINTER_SUCCESS_MESSAGE
             ),
         ),
         (
@@ -54,12 +55,18 @@ CHECKS = OrderedDict(
                 command="isort . --check-only", message=ISORT_SUCCESS_MESSAGE
             ),
         ),
+        (
+            "pylint",
+            REPLACE_EMPTY_STDOUT_SCRIPT.format(
+                command="pylint tasks.py gaslines tests", message=LINTER_SUCCESS_MESSAGE
+            ),
+        ),
     )
 )
 
 
 @invoke.task(name="format")
-def format_(context):
+def format_(context):  # pylint: disable=W0613
     """
     Runs all formatting tools configured for use with this project.
 
@@ -72,7 +79,7 @@ def format_(context):
 
 
 @invoke.task
-def check(context):
+def check(context):  # pylint: disable=W0613
     """
     Runs all code checks configured for use with this project.
 
@@ -86,7 +93,7 @@ def check(context):
 
 
 @invoke.task
-def test(context, coverage=None):
+def test(context, coverage=None):  # pylint: disable=W0613
     """
     Runs tests and reports on the current the code coverage.
 
