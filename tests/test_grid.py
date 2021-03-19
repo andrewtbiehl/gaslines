@@ -61,7 +61,7 @@ def test_subscripting_returns_correct_points():
         assert len(grid[i]) == 3
     # Test that we cannot access nonexistent rows
     with pytest.raises(IndexError):
-        grid[3]
+        assert grid[3]
     # Test that the first row only has pipes
     for point in grid[0]:
         assert not point.is_source() and not point.is_sink()
