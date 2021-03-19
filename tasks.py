@@ -59,7 +59,7 @@ CHECKS = OrderedDict(
 
 
 @invoke.task(name="format")
-def format_(context):
+def format_(context):  # pylint: disable=W0613
     """
     Runs all formatting tools configured for use with this project.
 
@@ -72,7 +72,7 @@ def format_(context):
 
 
 @invoke.task
-def check(context):
+def check(context):  # pylint: disable=W0613
     """
     Runs all code checks configured for use with this project.
 
@@ -86,7 +86,7 @@ def check(context):
 
 
 @invoke.task
-def test(context, coverage=None):
+def test(context, coverage=None):  # pylint: disable=W0613
     """
     Runs tests and reports on the current the code coverage.
 
