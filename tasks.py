@@ -20,6 +20,7 @@ echo "$output" && exit $code
 
 
 ISORT_SUCCESS_MESSAGE = "No import order issues found!"
+LINTER_SUCCESS_MESSAGE = "No code quality issues found!"
 
 
 # A list of formatter tools to run
@@ -45,7 +46,7 @@ CHECKS = OrderedDict(
         (
             "flake8",
             REPLACE_EMPTY_STDOUT_SCRIPT.format(
-                command="flake8 .", message="No code quality issues found!"
+                command="flake8 .", message=LINTER_SUCCESS_MESSAGE
             ),
         ),
         (
