@@ -57,7 +57,7 @@ class Observable:
             observer (callable): A callable to invoke upon notification by this
                 observable.
         """
-        self._observers.append(observer)
+        self._observers.append(observer)  # pylint: disable=E1101
 
     def notify(self):
         """
@@ -66,7 +66,7 @@ class Observable:
         Under the current implementation, observers are notified exactly in accordance
         with the order and amount that they were registered.
         """
-        for observer in self._observers:
+        for observer in self._observers:  # pylint: disable=E1101
             observer()
 
     @staticmethod
