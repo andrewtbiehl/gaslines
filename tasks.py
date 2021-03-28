@@ -181,7 +181,7 @@ def task(_function=None, *args, use_context=True, **kwargs):  # pylint: disable=
     return task_decorator if _function is None else task_decorator(_function)
 
 
-@invoke.task(name="format")
+@task(name="format")
 def format_(context):  # pylint: disable=W0613
     """
     Runs all formatting tools configured for use with this project.
@@ -194,7 +194,7 @@ def format_(context):  # pylint: disable=W0613
     execute_sequentially(FORMATTERS)
 
 
-@invoke.task
+@task
 def check(context):  # pylint: disable=W0613
     """
     Runs all code checks configured for use with this project.
@@ -208,7 +208,7 @@ def check(context):  # pylint: disable=W0613
     execute_sequentially(CHECKS)
 
 
-@invoke.task
+@task
 def test(context, coverage=None):  # pylint: disable=W0613
     """
     Runs tests and reports on the current the code coverage.
