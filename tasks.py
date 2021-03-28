@@ -65,6 +65,21 @@ CHECKS = OrderedDict(
 )
 
 
+def compose(outer_function, inner_function):
+    """
+    Utility function that returns the composition of two functions.
+
+    Args:
+        outer_function (function): A function that can take as input the output of
+            `inner_function`.
+        inner_function (function): Any function.
+
+    Returns:
+        function: The composition of `outer_function` with `inner_function`.
+    """
+    return lambda *args, **kwargs: outer_function(inner_function(*args, **kwargs))
+
+
 @invoke.task(name="format")
 def format_(context):  # pylint: disable=W0613
     """
