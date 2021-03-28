@@ -4,6 +4,8 @@ command line for more information on which tasks are available to run.
 """
 
 
+import functools
+import inspect
 import sys
 from collections import OrderedDict
 
@@ -65,6 +67,9 @@ CHECKS = OrderedDict(
 )
 
 
+CONTEXT_PARAMETER = inspect.Parameter("context", inspect.Parameter.POSITIONAL_ONLY)
+
+
 def compose(outer_function, inner_function):
     """
     Utility function that returns the composition of two functions.
@@ -78,6 +83,102 @@ def compose(outer_function, inner_function):
         function: The composition of `outer_function` with `inner_function`.
     """
     return lambda *args, **kwargs: outer_function(inner_function(*args, **kwargs))
+
+
+def prepend_context_parameter(signature):
+    """
+    Helper function that returns a Signature identical to the one given, with the one
+    exception of having an additional initial positional parameter named 'context'.
+
+    Args:
+        signature (Signature): Any function signature.
+
+    Returns:
+        Signature: A new signature with a new initial 'context' parameter.
+    """
+    parameters = signature.parameters.values()
+    parameters_with_context = (CONTEXT_PARAMETER, *parameters)
+    return signature.replace(parameters=parameters_with_context)
+
+
+def prepend_context_parameter_to_signature(task_function):
+    """
+    Helper function that patches the signature of a given Invoke task function under
+    the assumption that it is erroneously missing the function's initial context
+    parameter.
+
+    The new context parameter is (unsurprisingly) named 'context'.
+
+    Args:
+        task_function (function): A function to be used as an Invoke task that happens
+            to have an erroneous signature.
+    """
+    # Implementation details inspired by the examples provided in recipe 9.11 of
+    # "Python Cookbook" (2013) by Brian Jones and David Beazley
+    signature = inspect.signature(task_function)
+    task_function.__signature__ = prepend_context_parameter(signature)
+
+
+def create_task_function(function):
+    """
+    Helper function that returns a function identical to the one given, with the only
+    difference being that the returned function has an initial dummy context parameter
+    and therefore can be used to create an Invoke task.
+
+     The new context parameter is (unsurprisingly) named 'context'.
+
+    Args:
+        function (function): A function to be used as an Invoke task despite missing
+            an initial context parameter.
+
+    Returns:
+        function: A function with an initial dummy context parameter.
+    """
+
+    @functools.wraps(function)
+    def task_function(context, *args, **kwargs):
+        # The `context` variable is just a dummy and may be immediately removed
+        del context
+        return function(*args, **kwargs)
+
+    prepend_context_parameter_to_signature(task_function)
+    return task_function
+
+
+def task(_function=None, *args, use_context=True, **kwargs):  # pylint: disable=W1113
+    """
+    Replacement Invoke task decorator that enables the decorating of task functions
+    that don't have an initial context parameter. In all other ways this decorator is
+    identical to Invoke's own `task` decorator.
+
+    The Invoke execution tool requires that all task functions include an initial
+    context parameter, even if that parameter is not referenced anywhere in the
+    function body. If, on the other hand, the `use_context` parameter is set to False
+    in this decorator, then the decorated function does not need (and should not have)
+    a context parameter.
+
+     The new context parameter is (unsurprisingly) named 'context'.
+
+    Args:
+        _function (function, optional): The task function to decorate. This parameter
+            need not be set explicitly. Defaults to None.
+        use_context (bool): Whether the function has an initial Invoke context
+            parameter. Defaults to True. If not set to False then this decorator
+            behaves identically to the Invoke equivalent.
+        *args: Argument list passed directly to the Invoke task decorator.
+        **kwargs: Keyword argument list passed directly to the Invoke task decorator.
+
+    Returns:
+        function, Task: A decorator to apply to a task function if the function was
+            not yet supplied. Otherwise, returns the Invoke Task object resulting from
+            the decorator having been already applied to the task function.
+    """
+    task_decorator = invoke.task(*args, **kwargs)
+    # Add a dummy context parameter to the function if it doesn't have one already
+    if not use_context:
+        task_decorator = compose(task_decorator, create_task_function)
+    # Enable usage of the decorator both with and without parentheses
+    return task_decorator if _function is None else task_decorator(_function)
 
 
 @invoke.task(name="format")
