@@ -17,7 +17,9 @@ jobs:
         uses: actions/checkout@v2.3.4
       - name: Determine project Python version
         run: |
-          PYTHON_VERSION=$(jq --raw-output "._meta.requires.python_version" Pipfile.lock)
+          PYTHON_VERSION=$(
+            jq --raw-output "._meta.requires.python_version" Pipfile.lock
+          )
           echo "PYTHON_VERSION=${PYTHON_VERSION}" >> ${GITHUB_ENV}
       - name: Install project Python
         uses: actions/setup-python@v2.2.1
@@ -27,7 +29,10 @@ jobs:
         run: |
           PYTHON_CACHE_KEY=python-packages-${{hashFiles('Pipfile.lock')}}
           echo "PYTHON_CACHE_KEY=${PYTHON_CACHE_KEY}" >> ${GITHUB_ENV}
-          PYTHON_PATH=$(python -c "import sys, pathlib; print(pathlib.Path(sys.executable).parent.parent)")
+          set -- \
+            "import sys, pathlib;" \
+            "print(pathlib.Path(sys.executable).parent.parent)"
+          PYTHON_PATH=$(python -c "$*")
           echo "PYTHON_PATH=${PYTHON_PATH}" >> ${GITHUB_ENV}
       - name: Restore project Python cache
         id: restore-project-python-cache
@@ -38,10 +43,13 @@ jobs:
       - name: Install project Python packages
         if: ${{!steps.restore-project-python-cache.outputs.cache-hit}}
         run: |
-          pip list --outdated --format=freeze | sed "s/==.*//" | xargs pip install --upgrade
+          pip list --outdated --format=freeze \
+            | sed "s/==.*//" \
+            | xargs pip install --upgrade
           pip install pipenv
           pipenv install --system --ignore-pipfile --deploy --dev
-  # The following job is for all static code analyis, such as format enforcement and linting
+  # The following job is for all static code analyis
+  # The checks vary from format enforcement to linting
   check:
     name: Check
     runs-on: ubuntu-18.04
