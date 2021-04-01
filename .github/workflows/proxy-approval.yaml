@@ -2,7 +2,7 @@
 # If the review's summary comment is the same as this workflow's "TRIGGER_COMMENT",
 # the github-actions bot approves the pull request
 name: Proxy Approval
-on:
+"on":
   pull_request_review:
     types: submitted
 jobs:
