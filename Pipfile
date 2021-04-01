@@ -12,6 +12,7 @@ coveralls = "*"
 flake8 = "*"
 isort = "*"
 pylint = "*"
+yamllint = "*"
 
 [packages]
 
