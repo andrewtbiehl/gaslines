@@ -63,6 +63,12 @@ CHECKS = OrderedDict(
                 command="pylint tasks.py gaslines tests", message=LINTER_SUCCESS_MESSAGE
             ),
         ),
+        (
+            "yamllint",
+            REPLACE_EMPTY_STDOUT_SCRIPT.format(
+                command="yamllint --format=colored .", message=LINTER_SUCCESS_MESSAGE
+            ),
+        ),
     )
 )
 
