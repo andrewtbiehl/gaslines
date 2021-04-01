@@ -1,0 +1,27 @@
+extends: default
+rules:
+  # Replace all default warnings with errors
+  comments:
+    level: error
+  comments-indentation:
+    level: error
+  document-start:
+    level: error
+    present: false
+  truthy:
+    level: error
+  # Defer to Black for some formatting opinions
+  line-length:
+    max: 88
+  quoted-strings:
+    quote-type: double
+    required: only-when-needed
+  # Err on the strict side for other miscellaneous settings
+  document-end:
+    present: false
+  empty-lines:
+    max: 0
+  empty-values: enable
+  indentation:
+    spaces: 2
+  octal-values: enable
