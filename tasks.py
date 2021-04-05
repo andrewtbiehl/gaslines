@@ -4,10 +4,10 @@ command line for more information on which tasks are available to run.
 """
 
 
+import collections
 import functools
 import inspect
 import sys
-from collections import OrderedDict
 
 import invoke
 
@@ -27,7 +27,7 @@ LINTER_SUCCESS_MESSAGE = "No code quality issues found!"
 
 # A list of formatter tools to run
 # The keys are the tool names and the values are the shell commands
-FORMATTERS = OrderedDict(
+FORMATTERS = collections.OrderedDict(
     (
         ("black", "black ."),
         (
@@ -42,7 +42,7 @@ FORMATTERS = OrderedDict(
 
 # A list of check tools to run
 # The keys are the tool names and the values are the shell commands
-CHECKS = OrderedDict(
+CHECKS = collections.OrderedDict(
     (
         ("black", "black . --check"),
         (
