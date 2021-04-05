@@ -4,10 +4,10 @@ command line for more information on which tasks are available to run.
 """
 
 
+import collections
 import functools
 import inspect
 import sys
-from collections import OrderedDict
 
 import invoke
 
@@ -22,12 +22,14 @@ echo "$output" && exit $code
 
 
 ISORT_SUCCESS_MESSAGE = "No import order issues found!"
+
+
 LINTER_SUCCESS_MESSAGE = "No code quality issues found!"
 
 
 # A list of formatter tools to run
 # The keys are the tool names and the values are the shell commands
-FORMATTERS = OrderedDict(
+FORMATTERS = collections.OrderedDict(
     (
         ("black", "black ."),
         (
@@ -42,7 +44,7 @@ FORMATTERS = OrderedDict(
 
 # A list of check tools to run
 # The keys are the tool names and the values are the shell commands
-CHECKS = OrderedDict(
+CHECKS = collections.OrderedDict(
     (
         ("black", "black . --check"),
         (
@@ -209,6 +211,8 @@ def check():
     - black
     - flake8
     - isort
+    - pylint
+    - yamllint
     """
     print("----CHECK------------------------")
     execute_sequentially(CHECKS)
@@ -264,7 +268,5 @@ def execute_sequentially(commands):
 
 
 def execute(command):
-    """
-    Helper function that runs a shell command and reports on whether it failed
-    """
+    """Helper function that runs a shell command and reports on whether it failed"""
     return invoke.run(command, pty=True, warn=True).failed
