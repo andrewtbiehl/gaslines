@@ -22,6 +22,8 @@ echo "$output" && exit $code
 
 
 ISORT_SUCCESS_MESSAGE = "No import order issues found!"
+
+
 LINTER_SUCCESS_MESSAGE = "No code quality issues found!"
 
 
