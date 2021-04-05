@@ -209,6 +209,8 @@ def check():
     - black
     - flake8
     - isort
+    - pylint
+    - yamllint
     """
     print("----CHECK------------------------")
     execute_sequentially(CHECKS)
