@@ -189,6 +189,20 @@ def task(_function=None, *args, use_context=True, **kwargs):  # pylint: disable=
     return task_decorator if _function is None else task_decorator(_function)
 
 
+def create_bulleted_list(items, bullet="-"):
+    """
+    Returns a text-based bulleted list of the given items.
+
+    Args:
+        items (iterable): The items to add to the text-based list.
+        bullet (str): The choice of bullet to use. Defaults to "-".
+
+    Returns:
+        str: A bulleted, newline delimited list of the given items.
+    """
+    return "\n".join(f"{bullet} {item}" for item in items)
+
+
 @task(use_context=False, name="format")
 def format_():
     """
