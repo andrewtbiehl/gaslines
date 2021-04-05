@@ -268,7 +268,5 @@ def execute_sequentially(commands):
 
 
 def execute(command):
-    """
-    Helper function that runs a shell command and reports on whether it failed
-    """
+    """Helper function that runs a shell command and reports on whether it failed"""
     return invoke.run(command, pty=True, warn=True).failed
