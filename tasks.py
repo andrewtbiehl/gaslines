@@ -30,6 +30,9 @@ LINTER_SUCCESS_MESSAGE = "No code quality issues found!"
 TOOL_LIST_HEADER = "Currently, this includes:" + "\n"
 
 
+PARAGRAPH_SEPARATOR = "\n" * 2
+
+
 # A list of formatter tools to run
 # The keys are the tool names and the values are the shell commands
 FORMATTERS = collections.OrderedDict(
@@ -236,6 +239,20 @@ def create_bulleted_tool_list(tools):
         str: A bulleted list of tool names.
     """
     return TOOL_LIST_HEADER + create_bulleted_list(tools.keys())
+
+
+def append_tool_list_to_docstring(tools):
+    """
+    Helper function that appends a list of the given tools to the docstring of the
+    annotated task function.
+
+    Args:
+        tools (OrderedDict): The tools to add as a bulleted list to the docstring.
+
+    Returns:
+        function: A standard function decorator.
+    """
+    return append_to_docstring(PARAGRAPH_SEPARATOR + create_bulleted_tool_list(tools))
 
 
 @task(use_context=False, name="format")
