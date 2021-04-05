@@ -258,9 +258,7 @@ def append_tool_list_to_docstring(tools):
 @task(use_context=False, name="format")
 @append_tool_list_to_docstring(FORMATTERS)
 def format_():
-    """
-    Runs all formatting tools configured for use with this project.
-    """
+    """Runs all formatting tools configured for use with this project."""
     print("----FORMAT-----------------------")
     execute_sequentially(FORMATTERS)
 
@@ -268,9 +266,7 @@ def format_():
 @task(use_context=False)
 @append_tool_list_to_docstring(CHECKS)
 def check():
-    """
-    Runs all code checks configured for use with this project.
-    """
+    """Runs all code checks configured for use with this project."""
     print("----CHECK------------------------")
     execute_sequentially(CHECKS)
 
