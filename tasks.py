@@ -203,6 +203,24 @@ def create_bulleted_list(items, bullet="-"):
     return "\n".join(f"{bullet} {item}" for item in items)
 
 
+def append_to_docstring(content):
+    """
+    Appends the given content to the docstring of the decorated function.
+
+    Args:
+        content (str): The text to append to the decorated function's docstring.
+
+    Returns:
+        function: A standard function decorator.
+    """
+
+    def wrapper(function):
+        function.__doc__ += content
+        return function
+
+    return wrapper
+
+
 @task(use_context=False, name="format")
 def format_():
     """
