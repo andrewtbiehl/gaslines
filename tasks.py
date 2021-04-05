@@ -27,6 +27,9 @@ ISORT_SUCCESS_MESSAGE = "No import order issues found!"
 LINTER_SUCCESS_MESSAGE = "No code quality issues found!"
 
 
+TOOL_LIST_HEADER = "Currently, this includes:" + "\n"
+
+
 # A list of formatter tools to run
 # The keys are the tool names and the values are the shell commands
 FORMATTERS = collections.OrderedDict(
@@ -219,6 +222,20 @@ def append_to_docstring(content):
         return function
 
     return wrapper
+
+
+def create_bulleted_tool_list(tools):
+    """
+    Helper function that returns a text-based bulleted list of the given tools.
+
+    Args:
+        tools (OrderedDict): The tools whose names (the keys) will be added to the
+            text-based list.
+
+    Returns:
+        str: A bulleted list of tool names.
+    """
+    return TOOL_LIST_HEADER + create_bulleted_list(tools.keys())
 
 
 @task(use_context=False, name="format")
