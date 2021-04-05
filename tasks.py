@@ -27,6 +27,12 @@ ISORT_SUCCESS_MESSAGE = "No import order issues found!"
 LINTER_SUCCESS_MESSAGE = "No code quality issues found!"
 
 
+TOOL_LIST_HEADER = "Currently, this includes:" + "\n"
+
+
+PARAGRAPH_SEPARATOR = "\n" * 2
+
+
 # A list of formatter tools to run
 # The keys are the tool names and the values are the shell commands
 FORMATTERS = collections.OrderedDict(
@@ -189,31 +195,78 @@ def task(_function=None, *args, use_context=True, **kwargs):  # pylint: disable=
     return task_decorator if _function is None else task_decorator(_function)
 
 
-@task(use_context=False, name="format")
-def format_():
+def create_bulleted_list(items, bullet="-"):
     """
-    Runs all formatting tools configured for use with this project.
+    Returns a text-based bulleted list of the given items.
 
-    Currently, this includes:
-    - black
-    - isort
+    Args:
+        items (iterable): The items to add to the text-based list.
+        bullet (str): The choice of bullet to use. Defaults to "-".
+
+    Returns:
+        str: A bulleted, newline delimited list of the given items.
     """
+    return "\n".join(f"{bullet} {item}" for item in items)
+
+
+def append_to_docstring(content):
+    """
+    Appends the given content to the docstring of the decorated function.
+
+    Args:
+        content (str): The text to append to the decorated function's docstring.
+
+    Returns:
+        function: A standard function decorator.
+    """
+
+    def wrapper(function):
+        function.__doc__ += content
+        return function
+
+    return wrapper
+
+
+def create_bulleted_tool_list(tools):
+    """
+    Helper function that returns a text-based bulleted list of the given tools.
+
+    Args:
+        tools (OrderedDict): The tools whose names (the keys) will be added to the
+            text-based list.
+
+    Returns:
+        str: A bulleted list of tool names.
+    """
+    return TOOL_LIST_HEADER + create_bulleted_list(tools.keys())
+
+
+def append_tool_list_to_docstring(tools):
+    """
+    Helper function that appends a list of the given tools to the docstring of the
+    annotated task function.
+
+    Args:
+        tools (OrderedDict): The tools to add as a bulleted list to the docstring.
+
+    Returns:
+        function: A standard function decorator.
+    """
+    return append_to_docstring(PARAGRAPH_SEPARATOR + create_bulleted_tool_list(tools))
+
+
+@task(use_context=False, name="format")
+@append_tool_list_to_docstring(FORMATTERS)
+def format_():
+    """Runs all formatting tools configured for use with this project."""
     print("----FORMAT-----------------------")
     execute_sequentially(FORMATTERS)
 
 
 @task(use_context=False)
+@append_tool_list_to_docstring(CHECKS)
 def check():
-    """
-    Runs all code checks configured for use with this project.
-
-    Currently, this includes:
-    - black
-    - flake8
-    - isort
-    - pylint
-    - yamllint
-    """
+    """Runs all code checks configured for use with this project."""
     print("----CHECK------------------------")
     execute_sequentially(CHECKS)
 
