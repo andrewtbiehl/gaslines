@@ -13,6 +13,7 @@ flake8 = "*"
 isort = "*"
 pylint = "*"
 yamllint = "*"
+flake8-bugbear = "*"
 
 [packages]
 
