@@ -45,7 +45,7 @@ def july_12_grid():
             (-1, -1, -1, -1, -1, 0, -1),
             (-1, -1, 0, -1, -1, -1, -1),
             (5, -1, -1, 2, -1, -1, -1),
-        )
+        ),
     )
 
 
@@ -77,7 +77,7 @@ def august_9_grid():
             (-1, -1, -1, -1, -1, -1, -1),
             (-1, 3, 0, -1, -1, 4, -1),
             (4, -1, -1, -1, -1, -1, -1),
-        )
+        ),
     )
 
 
@@ -344,7 +344,8 @@ def zip_points_and_children(grid, child_locations):
 
     # Flatten both provided collections at the same time for brevity
     points, child_locations = map(
-        itertools.chain.from_iterable, (grid, child_locations)
+        itertools.chain.from_iterable,
+        (grid, child_locations),
     )
     # Use the previously defined closure to construct a list of child points
     children = map(get_nullable_point, child_locations)
@@ -362,7 +363,9 @@ def zip_points_and_children(grid, child_locations):
     ),
 )
 def test_algorithm_with_solvable_example_solves_grid(
-    strategy, grid, expected_child_locations
+    strategy,
+    grid,
+    expected_child_locations,
 ):
     """Verifies that each algorithm is able to solve each provided puzzle."""
     # Call the `grid` and `expected_child_locations` creators during each test
@@ -373,6 +376,7 @@ def test_algorithm_with_solvable_example_solves_grid(
     # Verify each actual child against the expected child one by one
     # Note that the child of a sink point should be `None`
     for point, expected_child in zip_points_and_children(
-        grid, expected_child_locations
+        grid,
+        expected_child_locations,
     ):
         assert point.child is expected_child
