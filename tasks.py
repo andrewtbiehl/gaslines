@@ -41,10 +41,11 @@ FORMATTERS = collections.OrderedDict(
         (
             "isort",
             REPLACE_EMPTY_STDOUT_SCRIPT.format(
-                command="isort .", message=ISORT_SUCCESS_MESSAGE
+                command="isort .",
+                message=ISORT_SUCCESS_MESSAGE,
             ),
         ),
-    )
+    ),
 )
 
 
@@ -56,28 +57,32 @@ CHECKS = collections.OrderedDict(
         (
             "flake8",
             REPLACE_EMPTY_STDOUT_SCRIPT.format(
-                command="flake8 .", message=LINTER_SUCCESS_MESSAGE
+                command="flake8 .",
+                message=LINTER_SUCCESS_MESSAGE,
             ),
         ),
         (
             "isort",
             REPLACE_EMPTY_STDOUT_SCRIPT.format(
-                command="isort . --check-only", message=ISORT_SUCCESS_MESSAGE
+                command="isort . --check-only",
+                message=ISORT_SUCCESS_MESSAGE,
             ),
         ),
         (
             "pylint",
             REPLACE_EMPTY_STDOUT_SCRIPT.format(
-                command="pylint tasks.py gaslines tests", message=LINTER_SUCCESS_MESSAGE
+                command="pylint tasks.py gaslines tests",
+                message=LINTER_SUCCESS_MESSAGE,
             ),
         ),
         (
             "yamllint",
             REPLACE_EMPTY_STDOUT_SCRIPT.format(
-                command="yamllint --format=colored .", message=LINTER_SUCCESS_MESSAGE
+                command="yamllint --format=colored .",
+                message=LINTER_SUCCESS_MESSAGE,
             ),
         ),
-    )
+    ),
 )
 
 

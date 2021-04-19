@@ -44,7 +44,8 @@ class Incrementor:
 
 
 @pytest.mark.parametrize(
-    "input_grid", (((-1,), (-1,)), ((1, 0), (-1, -1)), ((-1,), (-1,), (-1,)))
+    "input_grid",
+    (((-1,), (-1,)), ((1, 0), (-1, -1)), ((-1,), (-1,), (-1,))),
 )
 def test_dimensions_return_dimensions_when_asked(input_grid):
     """Verifies that the height and length properties return the correct values."""
