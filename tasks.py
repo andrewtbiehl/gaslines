@@ -260,7 +260,7 @@ def append_tool_list_to_docstring(tools):
     return append_to_docstring(PARAGRAPH_SEPARATOR + create_bulleted_tool_list(tools))
 
 
-@task(use_context=False, name="format")  # noqa: V103
+@task(use_context=False, name="format")
 @append_tool_list_to_docstring(FORMATTERS)
 def format_():
     """Runs all formatting tools configured for use with this project."""
@@ -268,7 +268,7 @@ def format_():
     execute_sequentially(FORMATTERS)
 
 
-@task(use_context=False)  # noqa: V103
+@task(use_context=False)
 @append_tool_list_to_docstring(CHECKS)
 def check():
     """Runs all code checks configured for use with this project."""
@@ -276,7 +276,7 @@ def check():
     execute_sequentially(CHECKS)
 
 
-@task(use_context=False)  # noqa: V103
+@task(use_context=False)
 def test(coverage=None):
     """
     Runs tests and reports on the current the code coverage.
