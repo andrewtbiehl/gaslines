@@ -135,7 +135,7 @@ def prepend_context_parameter_to_signature(task_function):
     # Implementation details inspired by the examples provided in recipe 9.11 of
     # "Python Cookbook" (2013) by Brian Jones and David Beazley
     signature = inspect.signature(task_function)
-    task_function.__signature__ = prepend_context_parameter(signature)
+    task_function.__signature__ = prepend_context_parameter(signature)  # noqa: V101
 
 
 def create_task_function(function):
@@ -155,7 +155,7 @@ def create_task_function(function):
     """
 
     @functools.wraps(function)
-    def task_function(context, *args, **kwargs):
+    def task_function(context, *args, **kwargs):  # noqa: V107
         # The `context` variable is just a dummy and may be immediately removed
         del context
         return function(*args, **kwargs)
@@ -226,7 +226,7 @@ def append_to_docstring(content):
     """
 
     def wrapper(function):
-        function.__doc__ += content
+        function.__doc__ += content  # noqa: V101
         return function
 
     return wrapper
@@ -260,7 +260,7 @@ def append_tool_list_to_docstring(tools):
     return append_to_docstring(PARAGRAPH_SEPARATOR + create_bulleted_tool_list(tools))
 
 
-@task(use_context=False, name="format")
+@task(use_context=False, name="format")  # noqa: V103
 @append_tool_list_to_docstring(FORMATTERS)
 def format_():
     """Runs all formatting tools configured for use with this project."""
@@ -268,7 +268,7 @@ def format_():
     execute_sequentially(FORMATTERS)
 
 
-@task(use_context=False)
+@task(use_context=False)  # noqa: V103
 @append_tool_list_to_docstring(CHECKS)
 def check():
     """Runs all code checks configured for use with this project."""
@@ -276,7 +276,7 @@ def check():
     execute_sequentially(CHECKS)
 
 
-@task(use_context=False)
+@task(use_context=False)  # noqa: V103
 def test(coverage=None):
     """
     Runs tests and reports on the current the code coverage.
