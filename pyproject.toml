@@ -1,0 +1,3 @@
+[tool.vulture]
+paths = ["."]
+ignore_decorators = ["@task"]

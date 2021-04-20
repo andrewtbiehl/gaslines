@@ -15,6 +15,7 @@ pylint = "*"
 yamllint = "*"
 flake8-bugbear = "*"
 flake8-commas = "*"
+vulture = "*"
 
 [packages]
 
