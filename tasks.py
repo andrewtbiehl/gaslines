@@ -82,6 +82,13 @@ CHECKS = collections.OrderedDict(
                 message=LINTER_SUCCESS_MESSAGE,
             ),
         ),
+        (
+            "vulture",
+            REPLACE_EMPTY_STDOUT_SCRIPT.format(
+                command="vulture",
+                message=LINTER_SUCCESS_MESSAGE,
+            ),
+        ),
     ),
 )
 
