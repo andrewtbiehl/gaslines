@@ -69,6 +69,10 @@ PARAGRAPH_SEPARATOR = "\n" * 2
 # The keys are the tool names and the values are the shell commands
 FORMATTERS = collections.OrderedDict(
     (
+        (
+            "eradicate",
+            ERADICATE_FORMAT_SCRIPT,
+        ),
         ("black", "black ."),
         (
             "isort",
@@ -120,6 +124,10 @@ CHECKS = collections.OrderedDict(
                 command="vulture",
                 message=LINTER_SUCCESS_MESSAGE,
             ),
+        ),
+        (
+            "eradicate",
+            ERADICATE_CHECK_SCRIPT,
         ),
     ),
 )
