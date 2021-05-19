@@ -21,6 +21,38 @@ echo "$output" && exit $code
 """
 
 
+# Shell script that combines eradicate with ydiff to enable prettier diff printing
+# Intended for use by the format task
+ERADICATE_FORMAT_SCRIPT = """\
+success="All files left unchanged!"
+error="The following changes were made:"
+disclaimer="Disclaimer: this tool is imperfect; further changes may be required."
+output=$(eradicate --recursive --aggressive . | ydiff --pager=cat --color=always);
+if [ -z "$output" ]; then
+  echo "$success";
+else
+  eradicate --recursive --aggressive --in-place .;
+  echo "$error\n\n$output\n\n$disclaimer";
+fi
+"""
+
+
+# Shell script that combines eradicate with ydiff to enable prettier diff printing
+# Intended for use by the check task
+ERADICATE_CHECK_SCRIPT = """\
+success="No commented-out code found!"
+error="The following changes would be made:"
+output=$(eradicate --recursive --aggressive --error .); code=$?;
+if [ $code -eq 0 ]; then
+  output="$success"
+else
+  output=$(echo "$output" | ydiff --pager=cat --color=always);
+  output="$error\n\n$output";
+fi
+echo "$output" && exit $code
+"""
+
+
 ISORT_SUCCESS_MESSAGE = "No import order issues found!"
 
 
@@ -37,6 +69,10 @@ PARAGRAPH_SEPARATOR = "\n" * 2
 # The keys are the tool names and the values are the shell commands
 FORMATTERS = collections.OrderedDict(
     (
+        (
+            "eradicate",
+            ERADICATE_FORMAT_SCRIPT,
+        ),
         ("black", "black ."),
         (
             "isort",
@@ -88,6 +124,10 @@ CHECKS = collections.OrderedDict(
                 command="vulture",
                 message=LINTER_SUCCESS_MESSAGE,
             ),
+        ),
+        (
+            "eradicate",
+            ERADICATE_CHECK_SCRIPT,
         ),
     ),
 )
