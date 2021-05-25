@@ -165,6 +165,10 @@ CHECKS = collections.OrderedDict(
             "eradicate",
             ERADICATE_CHECK_SCRIPT,
         ),
+        (
+            "proselint",
+            PROSELINT_CHECK_SCRIPT,
+        ),
     ),
 )
 
