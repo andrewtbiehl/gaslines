@@ -21,6 +21,42 @@ echo "$output" && exit $code
 """
 
 
+PROSELINT_IGNORED_PATHS_REGEX = "^({paths})".format(
+    paths="|".join(
+        (
+            r"\./\.git/",
+            r"\./\.pytest_cache/",
+        ),
+    ),
+)
+
+
+PROSELINT_IGNORED_ERRORS_REGEX = "({errors})".format(
+    errors="|".join(
+        (
+            r"typography\.symbols\.copyright",
+            r"typography\.symbols\.curly_quotes",
+            r"\./\.yamllint\.yaml:18:14: garner\.phrasal_adjectives\.ly",
+        ),
+    ),
+)
+
+
+# Shell script that runs proselint on a filtered list of files and then filters out
+# false positive errors
+PROSELINT_CHECK_SCRIPT = """\
+checked_files=$(find . -type f | grep --extended-regexp --invert-match "{p_regex}");
+raw_output=$(echo "$checked_files" | xargs proselint);
+output=$(echo "$raw_output" | grep --extended-regexp --invert-match "{e_regex}");
+code=$(expr 1 - $?);
+if [ $code -eq 0 ]; then output="No prose issues found!"; fi
+echo "$output" && exit $code;
+""".format(
+    p_regex=PROSELINT_IGNORED_PATHS_REGEX,
+    e_regex=PROSELINT_IGNORED_ERRORS_REGEX,
+)
+
+
 # Shell script that combines eradicate with ydiff to enable prettier diff printing
 # Intended for use by the format task
 ERADICATE_FORMAT_SCRIPT = """\
@@ -128,6 +164,10 @@ CHECKS = collections.OrderedDict(
         (
             "eradicate",
             ERADICATE_CHECK_SCRIPT,
+        ),
+        (
+            "proselint",
+            PROSELINT_CHECK_SCRIPT,
         ),
     ),
 )
