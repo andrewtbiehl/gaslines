@@ -1,6 +1,7 @@
 # The following workflow runs upon pushing new commits to any branches
 # It runs and reports all code quality checks required to merge to main
 name: Quality Control
+permissions: {}
 "on": push
 jobs:
   # The following job is for any setup that can be outsourced from the other jobs
