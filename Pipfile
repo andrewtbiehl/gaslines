@@ -19,6 +19,7 @@ vulture = "*"
 eradicate = "*"
 ydiff = "*"
 proselint = "*"
+flake8-comprehensions = "*"
 
 [packages]
 
