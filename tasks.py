@@ -60,6 +60,9 @@ echo "$output" && exit $code;
 ERADICATE_CHECK_COMMAND = "eradicate . --recursive --aggressive"
 
 
+ERADICATE_SUCCESS_MESSAGE = "No commented-out code found!"
+
+
 # Shell script that combines eradicate with ydiff to enable prettier diff printing
 # Intended for use by the format task
 ERADICATE_FORMAT_SCRIPT = """\
@@ -81,7 +84,7 @@ fi
 # Shell script that combines eradicate with ydiff to enable prettier diff printing
 # Intended for use by the check task
 ERADICATE_CHECK_SCRIPT = """\
-success="No commented-out code found!"
+success="{message}"
 error="The following changes would be made:"
 output=$({command}); code=1 && [ -z "$output" ] && code=0;
 if [ $code -eq 0 ]; then
@@ -93,6 +96,7 @@ fi
 echo "$output" && exit $code
 """.format(
     command=ERADICATE_CHECK_COMMAND,
+    message=ERADICATE_SUCCESS_MESSAGE,
 )
 
 
