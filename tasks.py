@@ -63,11 +63,11 @@ ERADICATE_FORMAT_SCRIPT = """\
 success="All files left unchanged!"
 error="The following changes were made:"
 disclaimer="Disclaimer: this tool is imperfect; further changes may be required."
-output=$(eradicate --recursive --aggressive . | ydiff --pager=cat --color=always);
+output=$(eradicate . --recursive --aggressive | ydiff --pager=cat --color=always);
 if [ -z "$output" ]; then
   echo "$success";
 else
-  eradicate --recursive --aggressive --in-place .;
+  eradicate . --recursive --aggressive --in-place;
   echo "$error\n\n$output\n\n$disclaimer";
 fi
 """
@@ -78,7 +78,7 @@ fi
 ERADICATE_CHECK_SCRIPT = """\
 success="No commented-out code found!"
 error="The following changes would be made:"
-output=$(eradicate --recursive --aggressive --error .); code=$?;
+output=$(eradicate . --recursive --aggressive --error); code=$?;
 if [ $code -eq 0 ]; then
   output="$success"
 else
