@@ -57,12 +57,6 @@ echo "$output" && exit $code;
 )
 
 
-ERADICATE_CHECK_COMMAND = "eradicate . --recursive --aggressive"
-
-
-ERADICATE_SUCCESS_MESSAGE = "No commented-out code found!"
-
-
 # Shell script pipes output from a command to ydiff to enable prettier diff printing
 # The command must support the `--in-place` flag for modifying files
 # Intended for use by the format task
@@ -94,6 +88,12 @@ else
 fi
 echo "$output" && exit $code
 """
+
+
+ERADICATE_CHECK_COMMAND = "eradicate . --recursive --aggressive"
+
+
+ERADICATE_SUCCESS_MESSAGE = "No commented-out code found!"
 
 
 ISORT_SUCCESS_MESSAGE = "No import order issues found!"
