@@ -57,20 +57,25 @@ echo "$output" && exit $code;
 )
 
 
+ERADICATE_CHECK_COMMAND = "eradicate . --recursive --aggressive"
+
+
 # Shell script that combines eradicate with ydiff to enable prettier diff printing
 # Intended for use by the format task
 ERADICATE_FORMAT_SCRIPT = """\
 success="All files left unchanged!"
 error="The following changes were made:"
 disclaimer="Disclaimer: this tool is imperfect; further changes may be required."
-output=$(eradicate . --recursive --aggressive | ydiff --pager=cat --color=always);
+output=$({base_command} | ydiff --pager=cat --color=always);
 if [ -z "$output" ]; then
   echo "$success";
 else
-  eradicate . --recursive --aggressive --in-place;
+  {base_command} --in-place;
   echo "$error\n\n$output\n\n$disclaimer";
 fi
-"""
+""".format(
+    base_command=ERADICATE_CHECK_COMMAND,
+)
 
 
 # Shell script that combines eradicate with ydiff to enable prettier diff printing
@@ -78,7 +83,7 @@ fi
 ERADICATE_CHECK_SCRIPT = """\
 success="No commented-out code found!"
 error="The following changes would be made:"
-output=$(eradicate . --recursive --aggressive); code=1 && [ -z "$output" ] && code=0;
+output=$({command}); code=1 && [ -z "$output" ] && code=0;
 if [ $code -eq 0 ]; then
   output="$success"
 else
@@ -86,7 +91,9 @@ else
   output="$error\n\n$output";
 fi
 echo "$output" && exit $code
-"""
+""".format(
+    command=ERADICATE_CHECK_COMMAND,
+)
 
 
 ISORT_SUCCESS_MESSAGE = "No import order issues found!"
