@@ -57,28 +57,29 @@ echo "$output" && exit $code;
 )
 
 
-# Shell script that combines eradicate with ydiff to enable prettier diff printing
+# Shell script pipes output from a command to ydiff to enable prettier diff printing
+# The command must support the `--in-place` flag for modifying files
 # Intended for use by the format task
-ERADICATE_FORMAT_SCRIPT = """\
+FORMAT_AND_PRETTY_PRINT_DIFF_SCRIPT = """\
 success="All files left unchanged!"
 error="The following changes were made:"
 disclaimer="Disclaimer: this tool is imperfect; further changes may be required."
-output=$(eradicate --recursive --aggressive . | ydiff --pager=cat --color=always);
+output=$({base_command} | ydiff --pager=cat --color=always);
 if [ -z "$output" ]; then
   echo "$success";
 else
-  eradicate --recursive --aggressive --in-place .;
+  {base_command} --in-place;
   echo "$error\n\n$output\n\n$disclaimer";
 fi
 """
 
 
-# Shell script that combines eradicate with ydiff to enable prettier diff printing
+# Shell script pipes output from a command to ydiff to enable prettier diff printing
 # Intended for use by the check task
-ERADICATE_CHECK_SCRIPT = """\
-success="No commented-out code found!"
+CHECK_AND_PRETTY_PRINT_DIFF_SCRIPT = """\
+success="{message}"
 error="The following changes would be made:"
-output=$(eradicate --recursive --aggressive --error .); code=$?;
+output=$({command}); code=1 && [ -z "$output" ] && code=0;
 if [ $code -eq 0 ]; then
   output="$success"
 else
@@ -87,6 +88,12 @@ else
 fi
 echo "$output" && exit $code
 """
+
+
+ERADICATE_CHECK_COMMAND = "eradicate . --recursive --aggressive"
+
+
+ERADICATE_SUCCESS_MESSAGE = "No commented-out code found!"
 
 
 ISORT_SUCCESS_MESSAGE = "No import order issues found!"
@@ -107,7 +114,9 @@ FORMATTERS = collections.OrderedDict(
     (
         (
             "eradicate",
-            ERADICATE_FORMAT_SCRIPT,
+            FORMAT_AND_PRETTY_PRINT_DIFF_SCRIPT.format(
+                base_command=ERADICATE_CHECK_COMMAND,
+            ),
         ),
         ("black", "black ."),
         (
@@ -163,7 +172,10 @@ CHECKS = collections.OrderedDict(
         ),
         (
             "eradicate",
-            ERADICATE_CHECK_SCRIPT,
+            CHECK_AND_PRETTY_PRINT_DIFF_SCRIPT.format(
+                command=ERADICATE_CHECK_COMMAND,
+                message=ERADICATE_SUCCESS_MESSAGE,
+            ),
         ),
         (
             "proselint",
