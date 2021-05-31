@@ -78,7 +78,7 @@ fi
 ERADICATE_CHECK_SCRIPT = """\
 success="No commented-out code found!"
 error="The following changes would be made:"
-output=$(eradicate . --recursive --aggressive --error); code=$?;
+output=$(eradicate . --recursive --aggressive); code=1 && [ -z "$output" ] && code=0;
 if [ $code -eq 0 ]; then
   output="$success"
 else
