@@ -203,6 +203,13 @@ CHECKS = collections.OrderedDict(
             "proselint",
             PROSELINT_CHECK_SCRIPT,
         ),
+        (
+            "autoflake",
+            CHECK_AND_PRETTY_PRINT_DIFF_SCRIPT.format(
+                command=AUTOFLAKE_CHECK_COMMAND,
+                message=AUTOFLAKE_SUCCESS_MESSAGE,
+            ),
+        ),
     ),
 )
 
