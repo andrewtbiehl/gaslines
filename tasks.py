@@ -93,7 +93,23 @@ echo "$output" && exit $code
 ERADICATE_CHECK_COMMAND = "eradicate . --recursive --aggressive"
 
 
+AUTOFLAKE_CHECK_COMMAND = " ".join(
+    (
+        "autoflake",
+        ".",
+        "--expand-star-imports",
+        "--remove-all-unused-imports",
+        "--remove-duplicate-keys",
+        "--remove-unused-variables",
+        "--recursive",
+    ),
+)
+
+
 ERADICATE_SUCCESS_MESSAGE = "No commented-out code found!"
+
+
+AUTOFLAKE_SUCCESS_MESSAGE = "No unused code found!"
 
 
 ISORT_SUCCESS_MESSAGE = "No import order issues found!"
@@ -116,6 +132,12 @@ FORMATTERS = collections.OrderedDict(
             "eradicate",
             FORMAT_AND_PRETTY_PRINT_DIFF_SCRIPT.format(
                 base_command=ERADICATE_CHECK_COMMAND,
+            ),
+        ),
+        (
+            "autoflake",
+            FORMAT_AND_PRETTY_PRINT_DIFF_SCRIPT.format(
+                base_command=AUTOFLAKE_CHECK_COMMAND,
             ),
         ),
         ("black", "black ."),
