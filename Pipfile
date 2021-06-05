@@ -21,6 +21,7 @@ ydiff = "*"
 proselint = "*"
 flake8-comprehensions = "*"
 autoflake = "*"
+pybetter = "*"
 
 [packages]
 
