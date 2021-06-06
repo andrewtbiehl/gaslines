@@ -217,6 +217,10 @@ CHECKS = collections.OrderedDict(
                 message=AUTOFLAKE_SUCCESS_MESSAGE,
             ),
         ),
+        (
+            "pybetter",
+            " ".join((PYBETTER_FORMAT_COMMAND, "--noop --exit-code 1")),
+        ),
     ),
 )
 
