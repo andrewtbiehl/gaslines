@@ -106,6 +106,9 @@ AUTOFLAKE_CHECK_COMMAND = " ".join(
 )
 
 
+PYBETTER_FORMAT_COMMAND = "pybetter . --exclude B004"
+
+
 ERADICATE_SUCCESS_MESSAGE = "No commented-out code found!"
 
 
@@ -139,6 +142,10 @@ FORMATTERS = collections.OrderedDict(
             FORMAT_AND_PRETTY_PRINT_DIFF_SCRIPT.format(
                 base_command=AUTOFLAKE_CHECK_COMMAND,
             ),
+        ),
+        (
+            "pybetter",
+            PYBETTER_FORMAT_COMMAND,
         ),
         ("black", "black ."),
         (
@@ -209,6 +216,10 @@ CHECKS = collections.OrderedDict(
                 command=AUTOFLAKE_CHECK_COMMAND,
                 message=AUTOFLAKE_SUCCESS_MESSAGE,
             ),
+        ),
+        (
+            "pybetter",
+            " ".join((PYBETTER_FORMAT_COMMAND, "--noop --exit-code 1")),
         ),
     ),
 )
