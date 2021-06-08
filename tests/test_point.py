@@ -113,9 +113,8 @@ def test_get_neighbor_with_missing_neighbor_returns_none():
     grid = Grid(((-1, -1, -1), (-1, -1, -1), (-1, -1, -1)))
     # Test the north west point
     point = grid[0][0]
-    assert not (
-        point.has_neighbor(Direction.NORTH) or point.has_neighbor(Direction.WEST)
-    )
+    assert not point.has_neighbor(Direction.NORTH)
+    assert not point.has_neighbor(Direction.WEST)
     assert point.get_neighbor(Direction.NORTH) is None
     # Test the north center point
     point = grid[0][1]
@@ -127,9 +126,8 @@ def test_get_neighbor_with_missing_neighbor_returns_none():
     assert point.get_neighbor(Direction.EAST) is None
     # Test the south east point
     point = grid[2][2]
-    assert not (
-        point.has_neighbor(Direction.EAST) or point.has_neighbor(Direction.SOUTH)
-    )
+    assert not point.has_neighbor(Direction.EAST)
+    assert not point.has_neighbor(Direction.SOUTH)
     assert point.get_neighbor(Direction.EAST) is None
 
 
