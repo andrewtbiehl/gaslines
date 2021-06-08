@@ -355,7 +355,7 @@ def zip_points_and_children(grid, child_locations):
 
 @pytest.mark.parametrize("strategy", (full_recursive, partial_recursive))
 @pytest.mark.parametrize(
-    "grid,expected_child_locations",
+    ("grid", "expected_child_locations"),
     (
         (small_solvable_grid, small_solvable_grid_solution_child_locations),
         (july_12_grid, july_12_grid_solution_child_locations),

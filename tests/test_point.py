@@ -23,7 +23,7 @@ def test_location_returns_location_when_asked(location):
     assert point.location == location
 
 
-@pytest.mark.parametrize("row_index,column_index", ((0, 0), (0, 1), (1, 2)))
+@pytest.mark.parametrize(("row_index", "column_index"), ((0, 0), (0, 1), (1, 2)))
 def test_indexes_return_correct_values_when_asked(row_index, column_index):
     """Verifies that the index properties return the expected indices."""
     point = Point(None, (row_index, column_index))
