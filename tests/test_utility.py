@@ -84,7 +84,7 @@ def test_list_returns_expected_direction_order():
 
 
 @pytest.mark.parametrize(
-    "input_string,expected_number",
+    ("input_string", "expected_number"),
     (("", 1), ("a", 1), ("\n", 2), ("a\nb\nc", 3), (GRID_STRING, 5)),
 )
 def test_get_number_of_rows_with_input_string_returns_expected_number(
@@ -96,7 +96,7 @@ def test_get_number_of_rows_with_input_string_returns_expected_number(
 
 
 @pytest.mark.parametrize(
-    "observable,method",
+    ("observable", "method"),
     (
         (Observable(), Observable.notify),
         (MockDerivedObservable(None), MockDerivedObservable.notify),

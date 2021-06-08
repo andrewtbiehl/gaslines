@@ -65,7 +65,8 @@ def test_subscripting_returns_correct_points():
         assert grid[3]
     # Test that the first row only has pipes
     for point in grid[0]:
-        assert not point.is_source() and not point.is_sink()
+        assert not point.is_source()
+        assert not point.is_sink()
     # Test that the second row only has sinks
     for point in grid[1]:
         assert point.is_sink()
