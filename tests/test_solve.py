@@ -12,19 +12,19 @@ from tests.utility import draw_path
 REVEAL_SEARCH_STRING = """\
 \x1b[J\
 2   ·
-     
+     \n\
 *   *
 \x1b[3A\
 \x1b[J\
 2---·
-     
+     \n\
 *   *
 \x1b[3A\
 \x1b[J\
 2---·
     |
 *   *
-"""  # noqa: W293
+"""
 
 
 def mock_strategy(grid):

@@ -15,11 +15,11 @@ from tests.utility import draw_path
 
 UNSOLVED_GRID_STRING = """\
 3   ·   ·
-         
+         \n\
 ·   2   ·
-         
+         \n\
 *   ·   ·\
-"""  # noqa: W293
+"""
 
 
 SOLVED_GRID_STRING = """\

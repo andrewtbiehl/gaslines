@@ -8,11 +8,11 @@ from gaslines.utility import Direction, Observable, get_number_of_rows
 
 GRID_STRING = """\
 3   ·   ·
-         
+         \n\
 ·   2   ·
-         
+         \n\
 *   ·   ·\
-"""  # noqa: W293
+"""
 
 
 class Incrementor:

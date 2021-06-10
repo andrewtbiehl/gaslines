@@ -9,11 +9,11 @@ from tests.utility import draw_path
 
 GRID_STRING_1 = """\
 3   ·   ·
-         
+         \n\
 ·   2   ·
-         
+         \n\
 *   ·   ·\
-"""  # noqa: W293
+"""
 
 GRID_STRING_2 = """\
 3---·---·
