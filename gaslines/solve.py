@@ -7,7 +7,7 @@ Lines puzzle.
 
 import functools
 
-import gaslines.display as display
+from gaslines import display
 from gaslines.logic import full_recursive
 
 
