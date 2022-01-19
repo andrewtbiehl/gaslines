@@ -5,7 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 invoke = "*"
-black = "==21.5b1"
+black = "==21.12b0"
 pytest = "*"
 coverage = "*"
 coveralls = "*"
