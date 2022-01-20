@@ -21,24 +21,26 @@ echo "$output" && exit $code
 """
 
 
+PROSELINT_IGNORED_PATHS = (
+    r"\./\.git/",
+    r"\./\.pytest_cache/",
+)
+
+
 PROSELINT_IGNORED_PATHS_REGEX = "^({paths})".format(
-    paths="|".join(
-        (
-            r"\./\.git/",
-            r"\./\.pytest_cache/",
-        ),
-    ),
+    paths="|".join(PROSELINT_IGNORED_PATHS),
+)
+
+
+PROSELINT_IGNORED_ERRORS = (
+    r"typography\.symbols\.copyright",
+    r"typography\.symbols\.curly_quotes",
+    r"\./\.yamllint\.yaml:18:14: garner\.phrasal_adjectives\.ly",
 )
 
 
 PROSELINT_IGNORED_ERRORS_REGEX = "({errors})".format(
-    errors="|".join(
-        (
-            r"typography\.symbols\.copyright",
-            r"typography\.symbols\.curly_quotes",
-            r"\./\.yamllint\.yaml:18:14: garner\.phrasal_adjectives\.ly",
-        ),
-    ),
+    errors="|".join(PROSELINT_IGNORED_ERRORS),
 )
 
 
