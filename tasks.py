@@ -21,40 +21,37 @@ echo "$output" && exit $code
 """
 
 
-PROSELINT_IGNORED_PATHS_REGEX = "^({paths})".format(
-    paths="|".join(
-        (
-            r"\./\.git/",
-            r"\./\.pytest_cache/",
-        ),
-    ),
+PROSELINT_IGNORED_PATHS = (
+    r"\./\.git/",
+    r"\./\.pytest_cache/",
 )
 
 
-PROSELINT_IGNORED_ERRORS_REGEX = "({errors})".format(
-    errors="|".join(
-        (
-            r"typography\.symbols\.copyright",
-            r"typography\.symbols\.curly_quotes",
-            r"\./\.yamllint\.yaml:18:14: garner\.phrasal_adjectives\.ly",
-        ),
-    ),
+PROSELINT_IGNORED_PATHS_REGEX = f"^({'|'.join(PROSELINT_IGNORED_PATHS)})"
+
+
+PROSELINT_IGNORED_ERRORS = (
+    r"typography\.symbols\.copyright",
+    r"typography\.symbols\.curly_quotes",
+    r"\./\.yamllint\.yaml:18:14: garner\.phrasal_adjectives\.ly",
 )
+
+
+PROSELINT_IGNORED_ERRORS_REGEX = f"({'|'.join(PROSELINT_IGNORED_ERRORS)})"
 
 
 # Shell script that runs proselint on a filtered list of files and then filters out
 # false positive errors
-PROSELINT_CHECK_SCRIPT = """\
-checked_files=$(find . -type f | grep --extended-regexp --invert-match "{p_regex}");
+PROSELINT_CHECK_SCRIPT = f"""\
+checked_files=$(find . -type f | grep --extended-regexp --invert-match \
+"{PROSELINT_IGNORED_PATHS_REGEX}");
 raw_output=$(echo "$checked_files" | xargs proselint);
-output=$(echo "$raw_output" | grep --extended-regexp --invert-match "{e_regex}");
+output=$(echo "$raw_output" | grep --extended-regexp --invert-match \
+"{PROSELINT_IGNORED_ERRORS_REGEX}");
 code=$(expr 1 - $?);
 if [ $code -eq 0 ]; then output="No prose issues found!"; fi
 echo "$output" && exit $code;
-""".format(
-    p_regex=PROSELINT_IGNORED_PATHS_REGEX,
-    e_regex=PROSELINT_IGNORED_ERRORS_REGEX,
-)
+"""
 
 
 # Shell script pipes output from a command to ydiff to enable prettier diff printing
