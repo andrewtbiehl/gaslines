@@ -23,6 +23,7 @@ flake8-comprehensions = "*"
 autoflake = "*"
 pybetter = "*"
 flake8-pytest-style = "*"
+pre-commit-hooks = "*"
 
 [packages]
 
