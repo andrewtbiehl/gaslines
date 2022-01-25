@@ -106,6 +106,11 @@ AUTOFLAKE_CHECK_COMMAND = " ".join(
 PYBETTER_FORMAT_COMMAND = "pybetter . --exclude B004"
 
 
+VALIDATE_JSON_CHECK_COMMAND = """\
+find -E . -type f -iregex '.*\\.(json|lock)' | xargs check-json
+"""
+
+
 ERADICATE_SUCCESS_MESSAGE = "No commented-out code found!"
 
 
@@ -165,6 +170,13 @@ CHECKS = collections.OrderedDict(
             REPLACE_EMPTY_STDOUT_SCRIPT.format(
                 command="find . -type f -name '*.py' | xargs check-ast",
                 message="No python syntax issues found!",
+            ),
+        ),
+        (
+            "validate json",
+            REPLACE_EMPTY_STDOUT_SCRIPT.format(
+                command=VALIDATE_JSON_CHECK_COMMAND,
+                message="No json syntax issues found!",
             ),
         ),
         ("black", "black . --check"),
