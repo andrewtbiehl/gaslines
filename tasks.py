@@ -160,6 +160,13 @@ FORMATTERS = collections.OrderedDict(
 # The keys are the tool names and the values are the shell commands
 CHECKS = collections.OrderedDict(
     (
+        (
+            "validate python",
+            REPLACE_EMPTY_STDOUT_SCRIPT.format(
+                command="find . -type f -name '*.py' | xargs check-ast",
+                message="No python syntax issues found!",
+            ),
+        ),
         ("black", "black . --check"),
         (
             "flake8",
