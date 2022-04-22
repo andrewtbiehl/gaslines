@@ -34,6 +34,7 @@ PROSELINT_IGNORED_ERRORS = (
     r"typography\.symbols\.copyright",
     r"typography\.symbols\.curly_quotes",
     r"\./\.yamllint\.yaml:18:14: garner\.phrasal_adjectives\.ly",
+    r"\./tests/test_point\.py:303:13: lexical_illusions\.misc",
 )
 
 
