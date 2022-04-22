@@ -108,12 +108,16 @@ PYBETTER_FORMAT_COMMAND = "pybetter . --exclude B004"
 
 
 VALIDATE_JSON_CHECK_COMMAND = """\
-find -E . -type f -iregex '.*\\.(json|lock)' | xargs check-json
+find . -type f | \
+grep --ignore-case --extended-regexp '^.*\\.(json|lock)$' | \
+xargs check-json
 """
 
 
 VALIDATE_TOML_CHECK_COMMAND = """\
-find -E . -type f -iregex '.*(Pipfile|\\.toml)' | xargs check-toml
+find . -type f | \
+grep --ignore-case --extended-regexp '^.*(Pipfile|\\.toml)$' | \
+xargs check-toml
 """
 
 
