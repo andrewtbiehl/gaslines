@@ -7,7 +7,7 @@ jobs:
   # The following job is for any setup that can be outsourced from the other jobs
   setup:
     name: Setup
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     timeout-minutes: 3
     outputs:
       PYTHON_VERSION: ${{env.PYTHON_VERSION}}
@@ -53,7 +53,7 @@ jobs:
   # The checks vary from format enforcement to linting
   check:
     name: Check
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     timeout-minutes: 3
     needs: setup
     env:
@@ -79,7 +79,7 @@ jobs:
   # The following job is for all dynamic code analyis, also known as tests
   test:
     name: Test
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     timeout-minutes: 3
     needs: setup
     env:
