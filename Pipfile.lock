@@ -257,11 +257,11 @@
         },
         "invoke": {
             "hashes": [
-                "sha256:a5159fc63dba6ca2a87a1e33d282b99cea69711b03c64a35bb4e1c53c6c4afa0",
-                "sha256:e332e49de40463f2016315f51df42313855772be86435686156bc18f45b5cc6c"
+                "sha256:2dc975b4f92be0c0a174ad2d063010c8a1fdb5e9389d69871001118b4fcac4fb",
+                "sha256:7b6deaf585eee0a848205d0b8c0014b9bf6f287a8eb798818a642dff1df14b19"
             ],
             "index": "pypi",
-            "version": "==1.7.0"
+            "version": "==1.7.1"
         },
         "isort": {
             "hashes": [
@@ -605,7 +605,7 @@
                 "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc",
                 "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"
             ],
-            "markers": "python_version < '3.11'",
+            "markers": "python_version >= '3.7'",
             "version": "==2.0.1"
         },
         "typing-extensions": {
