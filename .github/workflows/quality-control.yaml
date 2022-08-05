@@ -37,7 +37,7 @@ jobs:
           echo "PYTHON_PATH=${PYTHON_PATH}" >> ${GITHUB_ENV}
       - name: Restore project Python cache
         id: restore-project-python-cache
-        uses: actions/cache@v3.0.5
+        uses: actions/cache@v3.0.6
         with:
           key: ${{env.PYTHON_CACHE_KEY}}
           path: ${{env.PYTHON_PATH}}
@@ -69,7 +69,7 @@ jobs:
         with:
           python-version: ${{env.PYTHON_VERSION}}
       - name: Restore project Python cache
-        uses: actions/cache@v3.0.5
+        uses: actions/cache@v3.0.6
         with:
           key: ${{env.PYTHON_CACHE_KEY}}
           path: ${{env.PYTHON_PATH}}
@@ -95,7 +95,7 @@ jobs:
         with:
           python-version: ${{env.PYTHON_VERSION}}
       - name: Restore project Python cache
-        uses: actions/cache@v3.0.5
+        uses: actions/cache@v3.0.6
         with:
           key: ${{env.PYTHON_CACHE_KEY}}
           path: ${{env.PYTHON_PATH}}
