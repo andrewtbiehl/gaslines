@@ -17,7 +17,7 @@ jobs:
       TRIGGER_COMMENT: "@actions approve"
     steps:
       - name: Approve pull request
-        uses: hmarr/auto-approve-action@v2.2.1
+        uses: hmarr/auto-approve-action@v3.1.0
         # Approve the pull request only upon receiving the trigger comment
         if: github.event.review.body == env.TRIGGER_COMMENT
         with:
